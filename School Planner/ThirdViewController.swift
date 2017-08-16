@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
     @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var gradeLabel: UILabel!
@@ -21,7 +21,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var nBar: UINavigationBar!
     
     @IBOutlet weak var assignmentText: UITextField!
-    //@IBOutlet weak var categoryText: UITextField!
+    @IBOutlet weak var categoryText: UITextField!
     @IBOutlet weak var gradeText: UITextField!
     @IBOutlet weak var gradeDistributionText: UITextField!
     @IBOutlet weak var gradeCategoryText: UITextField!
@@ -39,8 +39,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     var picker = UIPickerView()
     var pickerData = [String]()
-    
-    var categoryText: UITextField = UITextField()
     
     override func viewDidLoad() {
         
@@ -61,8 +59,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.picker.showsSelectionIndicator = true
         self.picker.delegate = self
-        
-        self.categoryText.delegate = self
         
         customViewFunc()
         customViewFuncGrades()
@@ -460,12 +456,30 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 listOfGradeDistributions.reloadData()
             } else {
                 self.gradeTableData[edittingIndex] = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
-                self.amEdittingCell = false
+                //self.amEdittingCell = false
                 self.listOfGradeDistributions.reloadData()
             }
-        
-            pickerData.append(self.gradeCategoryText.text!)
-            writeToPreferences(key: "PickerData", data: self.pickerData)
+            
+            var notNew = false
+            if amEdittingCell {
+                self.amEdittingCell = false
+                for data in gradeTableData {
+                    let distributionsArray : [String] = data.components(separatedBy: "|")
+                    let da = distributionsArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+                    if da == self.gradeCategoryText.text?.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() {
+                        notNew = true
+                        pickerData[edittingIndex] = self.gradeCategoryText.text!
+                        writeToPreferences(key: "PickerData", data: self.pickerData)
+                        break
+                    }
+                }
+            }
+            
+            
+            if !notNew {
+                pickerData.append(self.gradeCategoryText.text!)
+                writeToPreferences(key: "PickerData", data: self.pickerData)
+            }
             
             addAssignmentButton.isEnabled = true
             calculateGradeButton.isEnabled = true
