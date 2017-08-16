@@ -21,23 +21,45 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var addClassButton: UIButton!
     @IBOutlet weak var listOfClasses: UITableView!
     @IBOutlet weak var classTextEdit: UITextField!
+    @IBOutlet weak var classDayTime: UITextField!
+    @IBOutlet weak var classLocation: UITextField!
+    
     var tableData = [String]()
     let thirdViewSegue = "segueToTabController"
     
     
+    @IBOutlet weak var navBar: UINavigationBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let app = UINavigationBar.appearance()
+        app.barTintColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
+        app.isTranslucent = false
+        app.barStyle = .black
+        app.tintColor = .white
+        app.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        
         self.listOfClasses.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        listOfClasses.delegate = self
-        listOfClasses.dataSource = self
-        classTextEdit.placeholder = "Enter class name..."
+        self.listOfClasses.delegate = self
+        self.listOfClasses.dataSource = self
         
-        addClassButton.layer.cornerRadius = 5
-        addClassButton.layer.borderWidth = 1
-        addClassButton.layer.borderColor = UIColor.blue.cgColor
+        self.classTextEdit.layer.borderWidth = 1.0
+        self.classDayTime.layer.borderWidth = 1.0
+        self.classLocation.layer.borderWidth = 1.0
         
-        classTextEdit.layer.borderColor = UIColor.green.cgColor
+        self.classTextEdit.layer.cornerRadius = 5
+        self.classDayTime.layer.cornerRadius = 5
+        self.classLocation.layer.cornerRadius = 5
+        
+        self.classTextEdit.layer.borderColor = UIColor.black.cgColor
+        self.classDayTime.layer.borderColor = UIColor.black.cgColor
+        self.classLocation.layer.borderColor = UIColor.black.cgColor
+        
+        self.addClassButton.layer.cornerRadius = 5
+        self.addClassButton.layer.borderWidth = 1
+        self.addClassButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        self.addClassButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         
         readFromPreferences()
         
@@ -47,7 +69,10 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        listOfClasses.reloadData()
+        
+        //self.navBar.barTintColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
+        //listOfClasses.reloadData()
+        animateTable()
     }
     
     override func didReceiveMemoryWarning() {
@@ -87,6 +112,29 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.listOfClasses.endUpdates()
             self.listOfClasses.reloadData()
             classTextEdit.text = ""
+        }
+    }
+    
+    func animateTable() {
+        listOfClasses.reloadData()
+        
+        let cells = listOfClasses.visibleCells
+        let tableHeight: CGFloat = listOfClasses.bounds.size.height
+        
+        for i in cells {
+            let cell: UITableViewCell = i as UITableViewCell
+            cell.transform = CGAffineTransform(translationX: 0, y: tableHeight)
+        }
+        
+        var index = 0
+        
+        for a in cells {
+            let cell: UITableViewCell = a as UITableViewCell
+            UIView.animate(withDuration: 1.5, delay: 0.05 * Double(index), usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: [], animations: {
+                cell.transform = CGAffineTransform(translationX: 0, y: 0);
+            }, completion: nil)
+            
+            index += 1
         }
     }
     

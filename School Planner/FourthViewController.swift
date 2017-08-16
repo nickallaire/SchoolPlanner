@@ -28,7 +28,8 @@ class FourthViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        self.barButtonItem.tintColor = UIColor.white
+        self.navBar.barTintColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
     }
     
     override func didReceiveMemoryWarning() {

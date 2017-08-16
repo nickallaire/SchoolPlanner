@@ -72,12 +72,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         // UIButton (addAssignmentButton) border customization
         addAssignmentButton.layer.cornerRadius = 5
         addAssignmentButton.layer.borderWidth = 1
-        addAssignmentButton.layer.borderColor = UIColor.blue.cgColor
+        addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        addAssignmentButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         
         // UIButton (calculateGradeButton) border customization
         calculateGradeButton.layer.cornerRadius = 5
         calculateGradeButton.layer.borderWidth = 1
-        calculateGradeButton.layer.borderColor = UIColor.blue.cgColor
+        calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        calculateGradeButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         
         // Long Press Gesture Recognizer (listOfAssignments)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressAssignments))
@@ -97,6 +99,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.nBar.barTintColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
+        self.bbItem.tintColor = UIColor.white
+        self.gbItem.tintColor = UIColor.white
         animateTable()
     }
     
@@ -186,7 +191,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         okayButton.addTarget(self, action: #selector(okayButtonGradesPressed), for: UIControlEvents.touchUpInside)
         okayButton.layer.cornerRadius = 5
         okayButton.layer.borderWidth = 1
-        okayButton.layer.borderColor = UIColor.lightGray.cgColor
+        okayButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        okayButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         customViewGrades.addSubview(okayButton)
         
         
@@ -197,7 +203,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: UIControlEvents.touchUpInside)
         cancelButton.layer.cornerRadius = 5
         cancelButton.layer.borderWidth = 1
-        cancelButton.layer.borderColor = UIColor.lightGray.cgColor
+        cancelButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        cancelButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         customViewGrades.addSubview(cancelButton)
         
         
@@ -257,7 +264,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         okayButton.addTarget(self, action: #selector(okayButtonPressed), for: UIControlEvents.touchUpInside)
         okayButton.layer.cornerRadius = 5
         okayButton.layer.borderWidth = 1
-        okayButton.layer.borderColor = UIColor.lightGray.cgColor
+        okayButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        okayButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         customView.addSubview(okayButton)
         
         
@@ -268,7 +276,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         cancelButton.addTarget(self, action: #selector(cancelButtonPressed), for: UIControlEvents.touchUpInside)
         cancelButton.layer.cornerRadius = 5
         cancelButton.layer.borderWidth = 1
-        cancelButton.layer.borderColor = UIColor.lightGray.cgColor
+        cancelButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        cancelButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         customView.addSubview(cancelButton)
         
         
@@ -434,8 +443,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             bbItem.isEnabled = true
             gbItem.isEnabled = true
             listOfAssignments.isUserInteractionEnabled = true
-            addAssignmentButton.layer.borderColor = UIColor.blue.cgColor
-            calculateGradeButton.layer.borderColor = UIColor.blue.cgColor
+            addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+            calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
 
             writeToPreferences(key: "Assignments", data: self.tableData)
             
@@ -499,13 +508,15 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             bbItem.isEnabled = true
             gbItem.isEnabled = true
             listOfAssignments.isUserInteractionEnabled = true
-            addAssignmentButton.layer.borderColor = UIColor.blue.cgColor
-            calculateGradeButton.layer.borderColor = UIColor.blue.cgColor
+            addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+            calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
             
             self.gradeDistributionText.text = ""
             self.gradeCategoryText.text = ""
             
             writeToPreferences(key: "GradeDistributions", data: self.gradeTableData)
+            
+            listOfGradeDistributions.setContentOffset(.zero, animated: false)
             
             self.view.endEditing(true)
             
@@ -526,8 +537,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         bbItem.isEnabled = true
         gbItem.isEnabled = true
         listOfAssignments.isUserInteractionEnabled = true
-        addAssignmentButton.layer.borderColor = UIColor.blue.cgColor
-        calculateGradeButton.layer.borderColor = UIColor.blue.cgColor
+        addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
         listOfGradeDistributions.setContentOffset(.zero, animated: false)
         
         self.view.endEditing(true)
