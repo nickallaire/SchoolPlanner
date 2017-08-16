@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var gradeLabel: UILabel!
@@ -65,8 +65,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.picker.showsSelectionIndicator = true
         self.picker.delegate = self
-        
-        //self.radioButton.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
         
         customViewFunc()
         customViewFuncGrades()
@@ -241,6 +239,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         // UITextField (gradeDistributionText) specifications
         gradeDistributionText = UITextField(frame: CGRect(x: 30, y: customViewGrades.frame.height - 90, width: customViewGrades.frame.width - 60, height: 30))
         gradeDistributionText.backgroundColor = UIColor.white
+        gradeDistributionText.delegate = self
         gradeDistributionText.placeholder = "Enter category percentage..."
         gradeDistributionText.font = UIFont.systemFont(ofSize: 15)
         gradeDistributionText.borderStyle = UITextBorderStyle.roundedRect
@@ -326,6 +325,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // UISwitch (radioButton) specifications
         radioButton = UISwitch() as UISwitch
+        radioButton.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
         radioButton.frame = CGRect(x: self.view.frame.width - 130, y: customView.frame.height - 100, width: 60, height: 30)
         radioButton.isOn = true
         radioButton.onTintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
@@ -337,6 +337,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         // UITextField (gradeText) specifications
         gradeText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         gradeText.backgroundColor = UIColor.white
+        gradeText.delegate = self
         gradeText.placeholder = "Enter grade..."
         gradeText.font = UIFont.systemFont(ofSize: 15)
         gradeText.borderStyle = UITextBorderStyle.roundedRect
@@ -358,7 +359,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         dueDateText.autocorrectionType = UITextAutocorrectionType.no
         dueDateText.keyboardType = UIKeyboardType.decimalPad
         dueDateText.returnKeyType = UIReturnKeyType.done
-        //dueDateText.clearButtonMode = UITextFieldViewMode.whileEditing;
+        //dueDateText.clearButtonMode = UITextFieldViewMode.whileEditing
         dueDateText.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         dueDateText.isHidden = true
         customView.addSubview(dueDateText)
@@ -604,6 +605,17 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == gradeText || textField == gradeDistributionText {
+            let countdots = textField.text?.components(separatedBy: ".")
+            let count = countdots!.count - 1
+            if count > 0 && string == "." {
+                return false
+            }
+        }
         return true
     }
     

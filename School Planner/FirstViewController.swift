@@ -47,6 +47,10 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfClasses.delegate = self
         self.listOfClasses.dataSource = self
         
+        self.classTextEdit.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.classDayTime.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.classLocation.clearButtonMode = UITextFieldViewMode.whileEditing
+        
         self.classTextEdit.layer.borderWidth = 1.0
         self.classDayTime.layer.borderWidth = 1.0
         self.classLocation.layer.borderWidth = 1.0
