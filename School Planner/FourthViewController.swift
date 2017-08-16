@@ -18,16 +18,17 @@ class FourthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         let barViewController = self.tabBarController?.viewControllers
         let svc = barViewController?[0] as! ThirdViewController
         self.className = svc.className
         self.navItem.title = self.className
         self.barButtonItem.title = "Back"
         self.navItem.leftBarButtonItem = barButtonItem
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
     }
     
     override func didReceiveMemoryWarning() {

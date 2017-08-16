@@ -8,7 +8,8 @@
 
 import UIKit
 
-class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+
     @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var gradeLabel: UILabel!
     @IBOutlet weak var calculateGradeButton: UIButton!
@@ -35,6 +36,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     var customViewGrades: UIView!
     var listOfGradeDistributions: UITableView!
     var assignmentLabel: UILabel!
+    
+    var picker = UIPickerView()
+    
+    var pickerData = [String]()
 
     
     override func viewDidLoad() {
@@ -53,12 +58,15 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfAssignments.delegate = self
         self.listOfAssignments.dataSource = self
         self.listOfAssignments.register(UITableViewCell.self, forCellReuseIdentifier: "assignmentCell")
-
+        
+        picker.delegate = self
+        
         customViewFunc()
         customViewFuncGrades()
         
         self.tableData = readFromPreferences(key: "Assignments")
         self.gradeTableData = readFromPreferences(key: "GradeDistributions")
+        self.pickerData = readFromPreferences(key: "PickerData")
         
         // UIButton (addAssignmentButton) border customization
         addAssignmentButton.layer.cornerRadius = 5
@@ -277,6 +285,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // UITextField (categoryText) specifications
         categoryText = UITextField(frame: CGRect(x: 30, y: 100, width: customView.frame.width - 60, height: 30))
+        categoryText.inputView = picker
         categoryText.backgroundColor = UIColor.white
         categoryText.placeholder = "Enter category..."
         categoryText.font = UIFont.systemFont(ofSize: 15)
@@ -437,6 +446,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.listOfGradeDistributions.reloadData()
             }
         
+            pickerData.append(self.gradeCategoryText.text!)
+            writeToPreferences(key: "PickerData", data: self.pickerData)
+            
             addAssignmentButton.isEnabled = true
             calculateGradeButton.isEnabled = true
             bbItem.isEnabled = true
@@ -487,8 +499,32 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         return true
     }
     
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerData.count;
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerData.count > 0 {
+            categoryText.text = pickerData[row]
+        }
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        if textField == categoryText {
+            categoryText.text = pickerData[0]
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -520,9 +556,28 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 listOfAssignments.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
                 writeToPreferences(key: "Assignments", data: self.tableData)
             } else {
-                self.gradeTableData.remove(at: indexPath.row)
-                listOfGradeDistributions.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
-                writeToPreferences(key: "GradeDistributions", data: self.gradeTableData)
+                var stillAssignments = false
+                let distributionArray : [String] = self.gradeTableData[indexPath.row].components(separatedBy: "|")
+                let da = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+                debugPrint("Category: " + distributionArray[0])
+                for data in tableData {
+                    let assignmentsArray : [String] = data.components(separatedBy: "|")
+                    let aa = assignmentsArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+                    if aa == da {
+                        stillAssignments = true
+                        break
+                    }
+                }
+                
+                if !stillAssignments {
+                    self.pickerData.remove(at: indexPath.row)
+                    self.gradeTableData.remove(at: indexPath.row)
+                    listOfGradeDistributions.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+                    writeToPreferences(key: "GradeDistributions", data: self.gradeTableData)
+                    writeToPreferences(key: "PickerData", data: self.pickerData)
+                } else {
+                    tableView.setEditing(false, animated: true)
+                }
             }
         }
     }
