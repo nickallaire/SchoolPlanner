@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var gradeLabel: UILabel!
@@ -21,7 +21,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var nBar: UINavigationBar!
     
     @IBOutlet weak var assignmentText: UITextField!
-    @IBOutlet weak var categoryText: UITextField!
+    //@IBOutlet weak var categoryText: UITextField!
     @IBOutlet weak var gradeText: UITextField!
     @IBOutlet weak var gradeDistributionText: UITextField!
     @IBOutlet weak var gradeCategoryText: UITextField!
@@ -38,9 +38,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     var assignmentLabel: UILabel!
     
     var picker = UIPickerView()
-    
     var pickerData = [String]()
-
+    
+    var categoryText: UITextField = UITextField()
     
     override func viewDidLoad() {
         
@@ -59,7 +59,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfAssignments.dataSource = self
         self.listOfAssignments.register(UITableViewCell.self, forCellReuseIdentifier: "assignmentCell")
         
-        picker.delegate = self
+        self.picker.showsSelectionIndicator = true
+        self.picker.delegate = self
+        
+        self.categoryText.delegate = self
         
         customViewFunc()
         customViewFuncGrades()
@@ -284,8 +287,18 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customView.addSubview(assignmentText)
         
         // UITextField (categoryText) specifications
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.sizeToFit()
+        toolBar.setItems([doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
         categoryText = UITextField(frame: CGRect(x: 30, y: 100, width: customView.frame.width - 60, height: 30))
         categoryText.inputView = picker
+        categoryText.inputAccessoryView = toolBar
+        categoryText.tintColor = UIColor.clear
         categoryText.backgroundColor = UIColor.white
         categoryText.placeholder = "Enter category..."
         categoryText.font = UIFont.systemFont(ofSize: 15)
@@ -293,7 +306,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         categoryText.autocorrectionType = UITextAutocorrectionType.no
         categoryText.keyboardType = UIKeyboardType.default
         categoryText.returnKeyType = UIReturnKeyType.done
-        categoryText.clearButtonMode = UITextFieldViewMode.whileEditing;
         categoryText.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         customView.addSubview(categoryText)
         
@@ -316,6 +328,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         assignmentLabel?.text = "Assignment Details"
         assignmentLabel?.textColor = UIColor.black
         customView!.addSubview(assignmentLabel)
+    }
+    
+    func donePicker() {
+        pickerView(picker, didSelectRow: picker.selectedRow(inComponent: 0), inComponent: 0)
+        picker.selectRow(0, inComponent: 0, animated: true)
+        categoryText.resignFirstResponder()
     }
     
     @IBAction func bbItemPressed(_ sender: AnyObject) {
@@ -518,12 +536,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerData.count > 0 {
             categoryText.text = pickerData[row]
-        }
-    }
-    
-    func textFieldDidBeginEditing(textField: UITextField) {
-        if textField == categoryText {
-            categoryText.text = pickerData[0]
         }
     }
     
