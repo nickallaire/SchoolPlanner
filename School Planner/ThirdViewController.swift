@@ -36,8 +36,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     var customViewGrades: UIView!
     var listOfGradeDistributions: UITableView!
     var assignmentLabel: UILabel!
+    var gradedLabel: UILabel!
+    var dueDateText: UITextField!
+    var radioButton: UISwitch!
     
     var picker = UIPickerView()
+    var datePicker = UIDatePicker()
     var pickerData = [String]()
     var oldValue = String()
 
@@ -61,6 +65,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.picker.showsSelectionIndicator = true
         self.picker.delegate = self
+        
+        //self.radioButton.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
         
         customViewFunc()
         customViewFuncGrades()
@@ -250,7 +256,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     func customViewFunc() {
         
         // UIView specifications
-        customView = UIView(frame: CGRect(x: 30, y: (self.view.frame.height / 2) - 135, width: self.view.frame.width - 60, height: 250))
+        customView = UIView(frame: CGRect(x: 30, y: (self.view.frame.height / 2) - 185, width: self.view.frame.width - 60, height: 300))
         customView.backgroundColor = UIColor(red: 0.9294, green: 0.9294, blue: 0.9294, alpha: 1.0)
         customView.addShadow()
         customView.isHidden = true
@@ -296,6 +302,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // UITextField (categoryText) specifications
         let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        doneButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
         toolBar.isTranslucent = true
@@ -317,6 +324,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         categoryText.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         customView.addSubview(categoryText)
         
+        // UISwitch (radioButton) specifications
+        radioButton = UISwitch() as UISwitch
+        radioButton.frame = CGRect(x: self.view.frame.width - 130, y: customView.frame.height - 100, width: 60, height: 30)
+        radioButton.isOn = true
+        radioButton.onTintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        radioButton.backgroundColor = UIColor.white
+        radioButton.layer.cornerRadius = 16.0
+        customView.addSubview(radioButton)
+        
+        
         // UITextField (gradeText) specifications
         gradeText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         gradeText.backgroundColor = UIColor.white
@@ -328,20 +345,54 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeText.returnKeyType = UIReturnKeyType.done
         gradeText.clearButtonMode = UITextFieldViewMode.whileEditing;
         gradeText.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        gradeText.isHidden = false
         customView.addSubview(gradeText)
+
+        // UITextField (dueDateText) specifications
+        dueDateText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
+        dueDateText.inputView = datePicker
+        dueDateText.backgroundColor = UIColor.white
+        dueDateText.placeholder = "Enter due date..."
+        dueDateText.font = UIFont.systemFont(ofSize: 15)
+        dueDateText.borderStyle = UITextBorderStyle.roundedRect
+        dueDateText.autocorrectionType = UITextAutocorrectionType.no
+        dueDateText.keyboardType = UIKeyboardType.decimalPad
+        dueDateText.returnKeyType = UIReturnKeyType.done
+        //dueDateText.clearButtonMode = UITextFieldViewMode.whileEditing;
+        dueDateText.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        dueDateText.isHidden = true
+        customView.addSubview(dueDateText)
         
         // UILabel (assignmentLabel) specifications
         assignmentLabel = UILabel() as UILabel
         assignmentLabel.frame = CGRect(x: (customView.frame.width / 2) - 74, y: 15, width: 148, height: 30)
         assignmentLabel?.text = "Assignment Details"
-        assignmentLabel?.textColor = UIColor.black
+        assignmentLabel?.textColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         customView!.addSubview(assignmentLabel)
+        
+        // UILabel (gradedLabel) specifications
+        gradedLabel = UILabel() as UILabel
+        gradedLabel.frame = CGRect(x: self.view.frame.width - 210, y: customView.frame.height - 100, width: 100, height: 30)
+        gradedLabel.text = "Graded?"
+        gradedLabel.textColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        customView.addSubview(gradedLabel)
+        
     }
     
     func donePicker() {
         pickerView(picker, didSelectRow: picker.selectedRow(inComponent: 0), inComponent: 0)
         picker.selectRow(0, inComponent: 0, animated: true)
         categoryText.resignFirstResponder()
+    }
+    
+    func switchChanged() {
+        if radioButton.isOn {
+            gradeText.isHidden = false
+            dueDateText.isHidden = true
+        } else {
+            gradeText.isHidden = true
+            dueDateText.isHidden = false
+        }
     }
     
     @IBAction func bbItemPressed(_ sender: AnyObject) {
