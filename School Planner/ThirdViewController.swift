@@ -39,6 +39,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     var picker = UIPickerView()
     var pickerData = [String]()
+    var oldValue = String()
+
     
     override func viewDidLoad() {
         
@@ -152,6 +154,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let distributionArray : [String] = tableText.components(separatedBy: "|")
                 self.gradeCategoryText.text = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
                 self.gradeDistributionText.text = distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                self.oldValue = gradeCategoryText.text!
                 customViewGrades.isHidden = false
                 addAssignmentButton.isEnabled = false
                 calculateGradeButton.isEnabled = false
@@ -456,8 +459,19 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 listOfGradeDistributions.reloadData()
             } else {
                 self.gradeTableData[edittingIndex] = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
-                //self.amEdittingCell = false
                 self.listOfGradeDistributions.reloadData()
+                
+                // Reload assignmentTable with new value
+                var i = 0;
+                for cell in tableData {
+                    let assignmentArray : [String] = cell.components(separatedBy: "|")
+                    let aa = assignmentArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+                    if aa == oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() {
+                        tableData[i] = assignmentArray[0] + "| " + self.gradeCategoryText.text! + " |" + assignmentArray[2]
+                    }
+                    i += 1
+                }
+                self.listOfAssignments.reloadData()
             }
             
             var notNew = false
@@ -474,7 +488,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                     }
                 }
             }
-            
             
             if !notNew {
                 pickerData.append(self.gradeCategoryText.text!)
@@ -515,6 +528,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         listOfAssignments.isUserInteractionEnabled = true
         addAssignmentButton.layer.borderColor = UIColor.blue.cgColor
         calculateGradeButton.layer.borderColor = UIColor.blue.cgColor
+        listOfGradeDistributions.setContentOffset(.zero, animated: false)
         
         self.view.endEditing(true)
         
