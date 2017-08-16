@@ -35,7 +35,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="accessoryView" destination="23L-7m-qkb" id="Oek-o5-w3U"/>
-                                            <segue destination="Yrs-G6-D4N" kind="presentation" identifier="segueToTabController" animates="NO" modalPresentationStyle="fullScreen" modalTransitionStyle="partialCurl" id="5vk-7x-jhz"/>
+                                            <segue destination="Yrs-G6-D4N" kind="presentation" identifier="segueToTabController" modalPresentationStyle="fullScreen" modalTransitionStyle="flipHorizontal" id="5vk-7x-jhz"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -69,13 +69,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class name..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ddo-tg-y9r">
-                                <rect key="frame" x="67" y="410" width="240" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VJQ-Fp-ACM">
                                 <rect key="frame" x="145" y="569" width="85" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -84,6 +77,21 @@
                                     <action selector="addClassButtonPressed:" destination="9pv-A4-QxB" eventType="touchDown" id="1OZ-dx-iFp"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class name..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ddo-tg-y9r">
+                                <rect key="frame" x="67" y="410" width="240" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S4l-5l-g42">
+                                <rect key="frame" x="0.0" y="-27" width="375" height="56"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.12549019607843137" green="0.60392156862745094" blue="0.67843137254901964" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="highlightedColor" red="0.12549019607843137" green="0.60392156862745094" blue="0.67843137254901964" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="shadowColor" red="0.12549019610000001" green="0.60392156860000001" blue="0.67843137249999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -94,6 +102,7 @@
                         <outlet property="classDayTime" destination="Y0g-oq-AxH" id="cho-JQ-F6g"/>
                         <outlet property="classLocation" destination="qGt-dT-kuH" id="u3G-6N-kPo"/>
                         <outlet property="classTextEdit" destination="Ddo-tg-y9r" id="atW-oG-Elj"/>
+                        <outlet property="fillerLabel" destination="S4l-5l-g42" id="ga6-ck-e3o"/>
                         <outlet property="listOfClasses" destination="dx5-pM-sv2" id="Vc9-11-WJP"/>
                         <outlet property="navBar" destination="Gcv-gh-vRf" id="t2y-pO-BdY"/>
                     </connections>

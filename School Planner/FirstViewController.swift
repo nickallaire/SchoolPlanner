@@ -18,6 +18,7 @@ import UIKit
 
 class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var fillerLabel: UILabel!
     @IBOutlet weak var addClassButton: UIButton!
     @IBOutlet weak var listOfClasses: UITableView!
     @IBOutlet weak var classTextEdit: UITextField!
@@ -39,6 +40,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         app.barStyle = .black
         app.tintColor = .white
         app.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        
+        self.fillerLabel.backgroundColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
         
         self.listOfClasses.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.listOfClasses.delegate = self
