@@ -66,6 +66,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.picker.showsSelectionIndicator = true
         self.picker.delegate = self
         
+        self.datePicker.datePickerMode = .date
+        
         customViewFunc()
         customViewFuncGrades()
         
@@ -311,6 +313,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         categoryText = UITextField(frame: CGRect(x: 30, y: 100, width: customView.frame.width - 60, height: 30))
         categoryText.inputView = picker
+        categoryText.delegate = self
         categoryText.inputAccessoryView = toolBar
         categoryText.tintColor = UIColor.clear
         categoryText.backgroundColor = UIColor.white
@@ -608,6 +611,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         return true
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) { // check this
+        if textField == categoryText {
+            if categoryText.characters.count == 0 {
+                categoryText.text = pickerData[0]
+            }
+        }
+    }
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == gradeText || textField == gradeDistributionText {
             let countdots = textField.text?.components(separatedBy: ".")
@@ -636,8 +647,15 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerData.count > 0 {
-            categoryText.text = pickerData[row]
+        if pickerView == picker { // check this
+            if pickerData.count > 0 {
+                categoryText.text = pickerData[row]
+            }
+        } else if pickerView == datePicker { // check this
+            let timeFormatter = DateFormatter()
+            timeFormatter.timeStyle = DateFormatter.Style.short
+            let strDate = timeFormatter.string(from: datePicker.date)
+            dueDateText.text = strDate
         }
     }
     
