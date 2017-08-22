@@ -43,7 +43,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.fillerLabel.backgroundColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
         
-        self.listOfClasses.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        //self.listOfClasses.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell")
+        self.listOfClasses.rowHeight = 75
         self.listOfClasses.delegate = self
         self.listOfClasses.dataSource = self
         
@@ -118,8 +119,10 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.listOfClasses.insertRows(at: [indexPath], with: .automatic)
             self.listOfClasses.endUpdates()
             self.listOfClasses.reloadData()
-            classTextEdit.text = ""
-            classTextEdit.resignFirstResponder()
+            self.classTextEdit.text = ""
+            self.classDayTime.text = ""
+            self.classLocation.text = ""
+            self.classTextEdit.resignFirstResponder()
         }
     }
     
@@ -155,8 +158,11 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = self.tableData[indexPath.row]
+        let cell: CustomTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
+        //cell.textLabel?.text = self.tableData[indexPath.row]
+        cell.classNameText?.text = self.tableData[indexPath.row]
+        cell.classLocationText?.text = "Peterson Hall 103"
+        cell.classDayAndTimeText?.text = "M/W 11:00 - 12:20"
         return cell
     }
     
@@ -206,7 +212,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func keyboardWillHide(notification: NSNotification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-            if self.view.frame.origin.y != 0{
+            if self.view.frame.origin.y != 0 {
                 self.view.frame.origin.y += 175
             }
         }

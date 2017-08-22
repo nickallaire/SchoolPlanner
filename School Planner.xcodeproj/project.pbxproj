@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F432F5CE1F4CDB2000A135FF /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F432F5CD1F4CDB2000A135FF /* CustomTableViewCell.swift */; };
 		F451E54E1E0336180071E931 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F451E54D1E0336180071E931 /* AppDelegate.swift */; };
 		F451E5501E0336180071E931 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F451E54F1E0336180071E931 /* FirstViewController.swift */; };
 		F451E5521E0336180071E931 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F451E5511E0336180071E931 /* SecondViewController.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F432F5CD1F4CDB2000A135FF /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		F451E54A1E0336180071E931 /* School Planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "School Planner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F451E54D1E0336180071E931 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F451E54F1E0336180071E931 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				F451E5511E0336180071E931 /* SecondViewController.swift */,
 				F451E57D1E03D1BA0071E931 /* ThirdViewController.swift */,
 				F4E3D4761E05083B00000EAF /* FourthViewController.swift */,
+				F432F5CD1F4CDB2000A135FF /* CustomTableViewCell.swift */,
 				F4832BC81E052C2000D409E7 /* extension.swift */,
 				F451E5531E0336180071E931 /* Main.storyboard */,
 				F451E5561E0336180071E931 /* Assets.xcassets */,
@@ -277,6 +280,7 @@
 				F451E5521E0336180071E931 /* SecondViewController.swift in Sources */,
 				F451E54E1E0336180071E931 /* AppDelegate.swift in Sources */,
 				F451E57E1E03D1BA0071E931 /* ThirdViewController.swift in Sources */,
+				F432F5CE1F4CDB2000A135FF /* CustomTableViewCell.swift in Sources */,
 				F4832BC91E052C2000D409E7 /* extension.swift in Sources */,
 				F451E5501E0336180071E931 /* FirstViewController.swift in Sources */,
 				F4E3D4771E05083B00000EAF /* FourthViewController.swift in Sources */,
