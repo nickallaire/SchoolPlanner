@@ -142,7 +142,17 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let distributionArray : [String] = tableText.components(separatedBy: "|")
                 self.assignmentText.text = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
                 self.categoryText.text = distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
-                self.gradeText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                let charSet = CharacterSet(charactersIn: "/")
+                if distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces).rangeOfCharacter(from: charSet) == nil {
+                    self.radioButton.setOn(true, animated: false)
+                    self.gradeText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
+
+                } else {
+                    self.radioButton.setOn(false, animated: false)
+                    self.gradeText.isHidden = true
+                    self.dueDateText.isHidden = false
+                    self.dueDateText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                }
                 customView.isHidden = false
                 addAssignmentButton.isEnabled = false
                 calculateGradeButton.isEnabled = false
@@ -510,7 +520,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     func okayButtonPressed(sender: UIButton) {
         if self.assignmentText.text?.characters.count != 0 && self.categoryText.text?.characters.count != 0 && (self.gradeText.text?.characters.count != 0 || self.dueDateText.text?.characters.count != 0){
             if !amEdittingCell {
-                let newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
+                var newString = ""
+                if self.gradeText.text?.characters.count != 0 {
+                    newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
+
+                } else {
+                    newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.dueDateText.text!
+
+                }
                 self.tableData.append(newString)
                 self.listOfAssignments.beginUpdates()
                 let indexPath = IndexPath(row: 0, section: 0)
@@ -520,7 +537,13 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.listOfAssignments.endUpdates()
                 self.listOfAssignments.reloadData()
             } else {
-                self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
+                if self.gradeText.text?.characters.count != 0 {
+                    self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
+
+                } else {
+                    self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.dueDateText.text!
+
+                }
                 self.amEdittingCell = false
                 self.listOfAssignments.reloadData()
             }
