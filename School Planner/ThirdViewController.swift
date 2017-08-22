@@ -508,7 +508,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func okayButtonPressed(sender: UIButton) {
-        if self.assignmentText.text?.characters.count != 0 && self.categoryText.text?.characters.count != 0 && self.gradeText.text?.characters.count != 0 {
+        if self.assignmentText.text?.characters.count != 0 && self.categoryText.text?.characters.count != 0 && (self.gradeText.text?.characters.count != 0 || self.dueDateText.text?.characters.count != 0){
             if !amEdittingCell {
                 let newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
                 self.tableData.append(newString)
@@ -528,6 +528,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.assignmentText.text = ""
             self.categoryText.text = ""
             self.gradeText.text = ""
+            self.dueDateText.text = ""
+            self.dueDateText.isHidden = true
+            self.gradeText.isHidden = false
+            self.radioButton.setOn(true, animated: false)
+            self.picker.selectRow(0, inComponent: 0, animated: false)
             
             addAssignmentButton.isEnabled = true
             calculateGradeButton.isEnabled = true
@@ -623,9 +628,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         let date = Date()
         self.datePicker.setDate(date, animated: false)
         self.radioButton.setOn(true, animated: false)
-        
+        self.picker.selectRow(0, inComponent: 0, animated: false)
         self.gradeDistributionText.text = ""
         self.gradeCategoryText.text = ""
+        
+        self.dueDateText.isHidden = true
+        self.gradeText.isHidden = false
         
         addAssignmentButton.isEnabled = true
         calculateGradeButton.isEnabled = true
