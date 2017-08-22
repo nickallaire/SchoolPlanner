@@ -328,6 +328,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         categoryText.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         customView.addSubview(categoryText)
         
+        
         // UISwitch (radioButton) specifications
         radioButton = UISwitch() as UISwitch
         radioButton.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
@@ -356,10 +357,22 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customView.addSubview(gradeText)
 
         // UITextField (dueDateText) specifications
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        let todaysDate = Date()
+        datePicker.minimumDate = todaysDate
+        let doneButton1 = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        doneButton1.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        let toolBar1 = UIToolbar()
+        toolBar1.barStyle = UIBarStyle.default
+        toolBar1.isTranslucent = true
+        toolBar1.sizeToFit()
+        toolBar1.setItems([doneButton1], animated: false)
+        toolBar1.isUserInteractionEnabled = true
+        
         dueDateText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         dueDateText.inputView = datePicker
         dueDateText.backgroundColor = UIColor.white
-        //dueDateText.inputAccessoryView = toolBar
+        dueDateText.inputAccessoryView = toolBar1
         dueDateText.placeholder = "Enter due date..."
         dueDateText.font = UIFont.systemFont(ofSize: 15)
         dueDateText.borderStyle = UITextBorderStyle.roundedRect
@@ -387,21 +400,38 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
-    func donePicker(_ textField: UITextField) {
-        pickerView(picker, didSelectRow: picker.selectedRow(inComponent: 0), inComponent: 0)
-        picker.selectRow(0, inComponent: 0, animated: true)
-        categoryText.resignFirstResponder()
+    func donePicker() {
+        if categoryText.isFirstResponder {
+            categoryText.resignFirstResponder()
+        } else if dueDateText.isFirstResponder {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            dueDateText.text = formatter.string(from: datePicker.date)
+            dueDateText.resignFirstResponder()
+        }
+    }
+    
+    func dateChanged(_ sender: UIDatePicker) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM/dd/yyyy"
+        dueDateText.text = formatter.string(from: datePicker.date)
     }
     
     func switchChanged() {
         if radioButton.isOn {
             gradeText.isHidden = false
             dueDateText.isHidden = true
-            gradeText.becomeFirstResponder()
+            dueDateText.text = ""
+            if dueDateText.isFirstResponder {
+                gradeText.becomeFirstResponder()
+            }
         } else {
             gradeText.isHidden = true
+            gradeText.text = ""
             dueDateText.isHidden = false
-            dueDateText.becomeFirstResponder()
+            if gradeText.isFirstResponder {
+                dueDateText.becomeFirstResponder()
+            }
         }
     }
     
@@ -589,6 +619,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.assignmentText.text = ""
         self.categoryText.text = ""
         self.gradeText.text = ""
+        self.dueDateText.text = ""
+        let date = Date()
+        self.datePicker.setDate(date, animated: false)
+        self.radioButton.setOn(true, animated: false)
         
         self.gradeDistributionText.text = ""
         self.gradeCategoryText.text = ""
@@ -617,7 +651,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         return true
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) { // check this
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryText {
             if categoryText.text?.characters.count == 0 {
                 categoryText.text = pickerData[0]
@@ -653,7 +687,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView == picker { // check this
+        if pickerView == picker {
             if pickerData.count > 0 {
                 categoryText.text = pickerData[row]
             }
@@ -661,6 +695,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             let timeFormatter = DateFormatter()
             timeFormatter.timeStyle = DateFormatter.Style.short
             let strDate = timeFormatter.string(from: datePicker.date)
+            debugPrint("DATE IS " + strDate)
             dueDateText.text = strDate
         }
     }
