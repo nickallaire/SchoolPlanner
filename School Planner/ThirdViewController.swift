@@ -228,6 +228,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeCategoryText = UITextField(frame: CGRect(x: 30, y: customViewGrades.frame.height - 140, width: customViewGrades.frame.width - 60, height: 30))
         gradeCategoryText.backgroundColor = UIColor.white
         gradeCategoryText.placeholder = "Enter category name..."
+        gradeCategoryText.delegate = self
         gradeCategoryText.font = UIFont.systemFont(ofSize: 15)
         gradeCategoryText.borderStyle = UITextBorderStyle.roundedRect
         gradeCategoryText.autocorrectionType = UITextAutocorrectionType.no
@@ -292,6 +293,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         assignmentText = UITextField(frame: CGRect(x: 30, y: 50, width: customView.frame.width - 60, height: 30))
         assignmentText.backgroundColor = UIColor.white
         assignmentText.placeholder = "Enter assignment..."
+        assignmentText.delegate = self
         assignmentText.font = UIFont.systemFont(ofSize: 15)
         assignmentText.borderStyle = UITextBorderStyle.roundedRect
         assignmentText.autocorrectionType = UITextAutocorrectionType.no
@@ -620,7 +622,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             if categoryText.text?.characters.count == 0 {
                 categoryText.text = pickerData[0]
             }
-        } 
+        }
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

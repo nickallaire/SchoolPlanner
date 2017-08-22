@@ -119,6 +119,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.listOfClasses.endUpdates()
             self.listOfClasses.reloadData()
             classTextEdit.text = ""
+            classTextEdit.resignFirstResponder()
         }
     }
     
@@ -197,7 +198,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= 85
+                self.view.frame.origin.y -= 175
             }
         }
         
@@ -206,7 +207,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func keyboardWillHide(notification: NSNotification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y != 0{
-                self.view.frame.origin.y += 85
+                self.view.frame.origin.y += 175
             }
         }
     }
