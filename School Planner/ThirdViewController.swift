@@ -382,6 +382,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         dueDateText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         dueDateText.inputView = datePicker
         dueDateText.backgroundColor = UIColor.white
+        dueDateText.delegate = self
         dueDateText.inputAccessoryView = toolBar1
         dueDateText.placeholder = "Enter due date..."
         dueDateText.font = UIFont.systemFont(ofSize: 15)
@@ -690,6 +691,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             if categoryText.text?.characters.count == 0 {
                 categoryText.text = pickerData[0]
             }
+        } else if textField == dueDateText {
+            let todaysDate = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MM/dd/yyyy"
+            dueDateText.text = formatter.string(from: todaysDate)
         }
     }
     
