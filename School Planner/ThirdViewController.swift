@@ -341,6 +341,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         gradeText.backgroundColor = UIColor.white
         gradeText.delegate = self
+        //gradeText.inputAccessoryView = toolBar
         gradeText.placeholder = "Enter grade..."
         gradeText.font = UIFont.systemFont(ofSize: 15)
         gradeText.borderStyle = UITextBorderStyle.roundedRect
@@ -356,6 +357,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         dueDateText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         dueDateText.inputView = datePicker
         dueDateText.backgroundColor = UIColor.white
+        //dueDateText.inputAccessoryView = toolBar
         dueDateText.placeholder = "Enter due date..."
         dueDateText.font = UIFont.systemFont(ofSize: 15)
         dueDateText.borderStyle = UITextBorderStyle.roundedRect
@@ -383,7 +385,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
-    func donePicker() {
+    func donePicker(_ textField: UITextField) {
         pickerView(picker, didSelectRow: picker.selectedRow(inComponent: 0), inComponent: 0)
         picker.selectRow(0, inComponent: 0, animated: true)
         categoryText.resignFirstResponder()
@@ -393,9 +395,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         if radioButton.isOn {
             gradeText.isHidden = false
             dueDateText.isHidden = true
+            gradeText.becomeFirstResponder()
         } else {
             gradeText.isHidden = true
             dueDateText.isHidden = false
+            dueDateText.becomeFirstResponder()
         }
     }
     
@@ -613,10 +617,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func textFieldDidBeginEditing(_ textField: UITextField) { // check this
         if textField == categoryText {
-            if categoryText.characters.count == 0 {
+            if categoryText.text?.characters.count == 0 {
                 categoryText.text = pickerData[0]
             }
-        }
+        } 
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
