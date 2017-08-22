@@ -16,7 +16,7 @@
 
 import UIKit
 
-class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var fillerLabel: UILabel!
     @IBOutlet weak var addClassButton: UIButton!
@@ -50,6 +50,34 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfClasses.delegate = self
         self.listOfClasses.dataSource = self
         
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(doneText))
+        let nextButton = UIBarButtonItem(title: "Next >", style: UIBarButtonItemStyle.plain, target: self, action: #selector(nextText))
+        let prevButton = UIBarButtonItem(title: "< Prev", style: UIBarButtonItemStyle.plain, target: self, action: #selector(prevText))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+
+        doneButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        nextButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        prevButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.sizeToFit()
+        toolBar.setItems([doneButton, flexibleSpace, prevButton, nextButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
+        self.classTextEdit.returnKeyType = UIReturnKeyType.done
+        self.classLocation.returnKeyType = UIReturnKeyType.done
+        self.classDayTime.returnKeyType = UIReturnKeyType.done
+        
+        self.classTextEdit.delegate = self
+        self.classLocation.delegate = self
+        self.classDayTime.delegate = self
+        
+        self.classTextEdit.inputAccessoryView = toolBar
+        self.classLocation.inputAccessoryView = toolBar
+        self.classDayTime.inputAccessoryView = toolBar
+        
         self.classTextEdit.clearButtonMode = UITextFieldViewMode.whileEditing
         self.classDayTime.clearButtonMode = UITextFieldViewMode.whileEditing
         self.classLocation.clearButtonMode = UITextFieldViewMode.whileEditing
@@ -75,6 +103,38 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func doneText() {
+        if self.classTextEdit.isFirstResponder {
+            self.classTextEdit.resignFirstResponder()
+        }
+        if self.classDayTime.isFirstResponder {
+            self.classDayTime.resignFirstResponder()
+        }
+        if self.classLocation.isFirstResponder {
+            self.classLocation.resignFirstResponder()
+        }
+    }
+    
+    func nextText() {
+        if self.classTextEdit.isFirstResponder {
+            self.classDayTime.becomeFirstResponder()
+        } else if self.classDayTime.isFirstResponder {
+            self.classLocation.becomeFirstResponder()
+        } else if self.classLocation.isFirstResponder {
+            self.classLocation.resignFirstResponder()
+        }
+    }
+    
+    func prevText() {
+        if self.classTextEdit.isFirstResponder {
+            self.classTextEdit.resignFirstResponder()
+        } else if self.classDayTime.isFirstResponder {
+            self.classTextEdit.becomeFirstResponder()
+        } else if self.classLocation.isFirstResponder {
+            self.classDayTime.becomeFirstResponder()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
