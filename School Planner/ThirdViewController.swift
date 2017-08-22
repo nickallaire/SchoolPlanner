@@ -488,9 +488,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                         let aa = assignmentsArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
                         let da = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
                         if aa == da {
-                            let grade = Double(assignmentsArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces))!
-                            totalCategory += grade
-                            count += 1
+                            let charSet = CharacterSet(charactersIn: "/")
+                            if assignmentsArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces).rangeOfCharacter(from: charSet) == nil {
+                                let grade = Double(assignmentsArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces))!
+                                totalCategory += grade
+                                count += 1
+                            }
                         }
                     }
                 }
