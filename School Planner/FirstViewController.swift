@@ -26,6 +26,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var classLocation: UITextField!
     
     var tableData = [String]()
+    var locationData = [String]()
+    var dayTimeData = [String]()
     let thirdViewSegue = "segueToTabController"
     
     
@@ -108,8 +110,11 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     @IBAction func addClassButtonPressed(_ sender: AnyObject) {
-        if (self.classTextEdit.text?.characters.count != 0) {
+        if (self.classTextEdit.text?.characters.count != 0 && self.classLocation.text?.characters.count != 0 && self.classDayTime.text?.characters.count != 0) {
+            
             self.tableData.append(self.classTextEdit.text!)
+            self.locationData.append(self.classLocation.text!)
+            self.dayTimeData.append(self.classDayTime.text!)
             writeToPreferences()
             
             self.listOfClasses.beginUpdates()
@@ -122,7 +127,15 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.classTextEdit.text = ""
             self.classDayTime.text = ""
             self.classLocation.text = ""
-            self.classTextEdit.resignFirstResponder()
+            if self.classTextEdit.isFirstResponder {
+                self.classTextEdit.resignFirstResponder()
+            }
+            if self.classDayTime.isFirstResponder {
+                self.classDayTime.resignFirstResponder()
+            }
+            if self.classLocation.isFirstResponder {
+                self.classLocation.resignFirstResponder()
+            }
         }
     }
     
@@ -161,8 +174,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         let cell: CustomTableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
         //cell.textLabel?.text = self.tableData[indexPath.row]
         cell.classNameText?.text = self.tableData[indexPath.row]
-        cell.classLocationText?.text = "Peterson Hall 103"
-        cell.classDayAndTimeText?.text = "M/W 11:00 - 12:20"
+        cell.classLocationText?.text = self.locationData[indexPath.row]
+        cell.classDayAndTimeText?.text = self.dayTimeData[indexPath.row]
         return cell
     }
     
@@ -183,6 +196,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         let preferences = UserDefaults.standard
         let currentKey = "classList"
         preferences.set(self.tableData, forKey: currentKey)
+        preferences.set(self.locationData, forKey: currentKey + " location")
+        preferences.set(self.dayTimeData, forKey: currentKey + " dayTime")
         let didSave = preferences.synchronize()
         if !didSave {
             
@@ -197,6 +212,20 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             let td = preferences.array(forKey: currentKey)
             self.tableData = td as! [String]
+        }
+        
+        if preferences.object(forKey: currentKey + " location") == nil {
+            
+        } else {
+            let ld = preferences.array(forKey: currentKey + " location")
+            self.locationData =  ld as! [String]
+        }
+        
+        if preferences.object(forKey: currentKey + " dayTime") == nil {
+            
+        } else {
+            let dtd = preferences.array(forKey: currentKey + " dayTime")
+            self.dayTimeData = dtd as! [String]
         }
     }
     
