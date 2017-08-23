@@ -28,6 +28,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     var tableData = [String]()
     var locationData = [String]()
     var dayTimeData = [String]()
+    var alert: UIAlertController!
     let thirdViewSegue = "segueToTabController"
     
     
@@ -49,12 +50,12 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfClasses.delegate = self
         self.listOfClasses.dataSource = self
         
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(doneText))
+        //let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(doneText))
         let nextButton = UIBarButtonItem(title: "Next >", style: UIBarButtonItemStyle.plain, target: self, action: #selector(nextText))
         let prevButton = UIBarButtonItem(title: "< Prev", style: UIBarButtonItemStyle.plain, target: self, action: #selector(prevText))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
 
-        doneButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        //doneButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         nextButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         prevButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         
@@ -62,7 +63,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         toolBar.barStyle = UIBarStyle.default
         toolBar.isTranslucent = true
         toolBar.sizeToFit()
-        toolBar.setItems([doneButton, flexibleSpace, prevButton, nextButton], animated: false)
+        toolBar.setItems([prevButton, flexibleSpace, nextButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         
         self.classTextEdit.returnKeyType = UIReturnKeyType.done
@@ -106,6 +107,16 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    func showAlertMessage(title: String, message: String) {
+        self.alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        self.present(self.alert, animated: true, completion: nil)
+        Timer.scheduledTimer(timeInterval: 1.75, target: self, selector: #selector(dismissAlert), userInfo: nil, repeats: false)
+    }
+    
+    func dismissAlert() {
+        self.alert.dismiss(animated: true, completion: nil)
     }
     
     func doneText() {
@@ -201,6 +212,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             if self.classLocation.isFirstResponder {
                 self.classLocation.resignFirstResponder()
             }
+        } else {
+            showAlertMessage(title: "Invalid Class", message: "Make sure all fields are completed.")
         }
     }
     

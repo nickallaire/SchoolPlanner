@@ -48,6 +48,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     var datePicker = UIDatePicker()
     var pickerData = [String]()
     var oldValue = String()
+    
+    var alert: UIAlertController!
 
     
     override func viewDidLoad() {
@@ -268,7 +270,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeCategoryText.inputAccessoryView = toolBar
         gradeCategoryText.font = UIFont.systemFont(ofSize: 15)
         gradeCategoryText.borderStyle = UITextBorderStyle.roundedRect
-        gradeCategoryText.autocorrectionType = UITextAutocorrectionType.no
+        gradeCategoryText.autocorrectionType = UITextAutocorrectionType.yes
         gradeCategoryText.keyboardType = UIKeyboardType.default
         gradeCategoryText.returnKeyType = UIReturnKeyType.done
         gradeCategoryText.clearButtonMode = UITextFieldViewMode.whileEditing;
@@ -456,6 +458,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradedLabel.textColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         customView.addSubview(gradedLabel)
         
+    }
+    
+    func showAlertMessage(title: String, message: String) {
+        self.alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        self.present(self.alert, animated: true, completion: nil)
+        Timer.scheduledTimer(timeInterval: 1.75, target: self, selector: #selector(dismissAlert), userInfo: nil, repeats: false)
+    }
+    
+    func dismissAlert() {
+        self.alert.dismiss(animated: true, completion: nil)
     }
     
     func donePicker() {
@@ -678,6 +690,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.view.endEditing(true)
             
             customView.isHidden = true
+        } else {
+            showAlertMessage(title: "Invalid Assignment", message: "Make sure all fields are completed.")
         }
     }
     
@@ -748,6 +762,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.view.endEditing(true)
             
             customViewGrades.isHidden = true
+        } else {
+            showAlertMessage(title: "Invalid Category", message: "Make sure all fields are completed.")
         }
     }
     
