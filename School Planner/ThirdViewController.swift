@@ -71,7 +71,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Initializing UITableView
         self.listOfAssignments.delegate = self
         self.listOfAssignments.dataSource = self
-        self.listOfAssignments.register(UITableViewCell.self, forCellReuseIdentifier: "assignmentCell")
+        //self.listOfAssignments.register(UITableViewCell.self, forCellReuseIdentifier: "assignmentCell")
+        self.listOfAssignments.rowHeight = 60
         
         self.picker.showsSelectionIndicator = true
         self.picker.delegate = self
@@ -977,8 +978,23 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             cell.backgroundColor = UIColor.clear
             return cell
         } else {
-            let cell = listOfAssignments.dequeueReusableCell(withIdentifier: "assignmentCell", for: indexPath)
-            cell.textLabel?.text = self.tableData[indexPath.row]
+            let cell : AssignmentTableViewCell = listOfAssignments.dequeueReusableCell(withIdentifier: "assignmentCell", for: indexPath) as! AssignmentTableViewCell
+            //cell.textLabel?.text = self.tableData[indexPath.row]
+            let array: [String] = self.tableData[indexPath.row].components(separatedBy: "|")
+            let assignment = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
+            let category = array[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
+            let grade = array[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
+            cell.assignmentNameText?.text = assignment
+            cell.assignmentCategoryText?.text = category
+            
+            let charSet = CharacterSet(charactersIn: "/")
+            if grade.rangeOfCharacter(from: charSet) != nil {
+                cell.assignmentGradeText?.text = "Due: " + grade
+
+            } else {
+                cell.assignmentGradeText?.text = "Score: " + grade
+            }
+
             return cell
         }
         

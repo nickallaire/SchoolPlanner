@@ -47,11 +47,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "School Planner/ThirdViewController.swift"
-            timestampString = "525162660.935564"
+            timestampString = "525164181.944299"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "609"
-            endingLineNumber = "609"
+            startingLineNumber = "610"
+            endingLineNumber = "610"
             landmarkName = "checkDuplicateAssignment(assignment:)"
             landmarkType = "7">
          </BreakpointContent>

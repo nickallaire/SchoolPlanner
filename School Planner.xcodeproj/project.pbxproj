@@ -18,6 +18,7 @@
 		F451E5701E0336190071E931 /* School_PlannerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F451E56F1E0336190071E931 /* School_PlannerUITests.swift */; };
 		F451E57E1E03D1BA0071E931 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F451E57D1E03D1BA0071E931 /* ThirdViewController.swift */; };
 		F4832BC91E052C2000D409E7 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4832BC81E052C2000D409E7 /* extension.swift */; };
+		F49718941F4D5CB9009CA7C9 /* AssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49718931F4D5CB9009CA7C9 /* AssignmentTableViewCell.swift */; };
 		F4E3D4771E05083B00000EAF /* FourthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4E3D4761E05083B00000EAF /* FourthViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 		F451E5711E0336190071E931 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F451E57D1E03D1BA0071E931 /* ThirdViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
 		F4832BC81E052C2000D409E7 /* extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
+		F49718931F4D5CB9009CA7C9 /* AssignmentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssignmentTableViewCell.swift; sourceTree = "<group>"; };
 		F4E3D4761E05083B00000EAF /* FourthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FourthViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,6 +115,7 @@
 				F451E57D1E03D1BA0071E931 /* ThirdViewController.swift */,
 				F4E3D4761E05083B00000EAF /* FourthViewController.swift */,
 				F432F5CD1F4CDB2000A135FF /* CustomTableViewCell.swift */,
+				F49718931F4D5CB9009CA7C9 /* AssignmentTableViewCell.swift */,
 				F4832BC81E052C2000D409E7 /* extension.swift */,
 				F451E5531E0336180071E931 /* Main.storyboard */,
 				F451E5561E0336180071E931 /* Assets.xcassets */,
@@ -281,6 +284,7 @@
 				F451E54E1E0336180071E931 /* AppDelegate.swift in Sources */,
 				F451E57E1E03D1BA0071E931 /* ThirdViewController.swift in Sources */,
 				F432F5CE1F4CDB2000A135FF /* CustomTableViewCell.swift in Sources */,
+				F49718941F4D5CB9009CA7C9 /* AssignmentTableViewCell.swift in Sources */,
 				F4832BC91E052C2000D409E7 /* extension.swift in Sources */,
 				F451E5501E0336180071E931 /* FirstViewController.swift in Sources */,
 				F4E3D4771E05083B00000EAF /* FourthViewController.swift in Sources */,
