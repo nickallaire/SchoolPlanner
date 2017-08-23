@@ -180,7 +180,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ATO-SD-BQh">
-                                <rect key="frame" x="16" y="156" width="343" height="454"/>
+                                <rect key="frame" x="16" y="222" width="343" height="388"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -222,6 +222,20 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01w-T9-Jor">
+                                <rect key="frame" x="16" y="148" width="343" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtY-nV-6kt">
+                                <rect key="frame" x="16" y="185" width="343" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -232,9 +246,11 @@
                         <outlet property="addAssignmentButton" destination="Alv-c0-ebH" id="TTl-3t-td4"/>
                         <outlet property="bbItem" destination="JcT-83-Ocg" id="AFg-le-TiZ"/>
                         <outlet property="calculateGradeButton" destination="s2z-9u-Y9k" id="dB9-Iz-20d"/>
+                        <outlet property="dayTimeText" destination="jtY-nV-6kt" id="L2e-TI-26C"/>
                         <outlet property="gbItem" destination="cLR-Ey-mZb" id="3Ui-vf-e5N"/>
                         <outlet property="gradeLabel" destination="t1E-Mc-zoz" id="JNx-Bk-iWV"/>
                         <outlet property="listOfAssignments" destination="ATO-SD-BQh" id="LTB-TM-Wgz"/>
+                        <outlet property="locationText" destination="01w-T9-Jor" id="06W-Km-zp0"/>
                         <outlet property="nBar" destination="bWP-By-KYn" id="6jP-pN-qS4"/>
                         <outlet property="nItem" destination="O51-dr-oVf" id="Pif-VS-kmA"/>
                     </connections>

@@ -9,6 +9,8 @@
 import UIKit
 
 class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+    @IBOutlet weak var dayTimeText: UILabel!
+    @IBOutlet weak var locationText: UILabel!
 
     @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var gradeLabel: UILabel!
@@ -27,6 +29,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var gradeCategoryText: UITextField!
     
     var className = String()
+    var classLocation = String()
+    var classDayTime = String()
     var tableData = [String]()
     var gradeTableData = [String]()
     var edittingIndex = 0
@@ -50,13 +54,17 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+
         // Navigation Item customization
         self.nItem.title = className
         self.bbItem.title = "Back"
         self.gbItem.title = "Distributions"
         self.nItem.leftBarButtonItem = bbItem
         self.nItem.rightBarButtonItem = gbItem
+        
+        // Initializing class information
+        self.locationText.text = classLocation
+        self.dayTimeText.text = classDayTime
         
         // Initializing UITableView
         self.listOfAssignments.delegate = self
@@ -234,11 +242,30 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customViewGrades.addSubview(listOfGradeDistributions)
         
         
+        // UIToolbar (toolBar) specifications
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        let nextButton = UIBarButtonItem(title: "Next >", style: UIBarButtonItemStyle.plain, target: self, action: #selector(nextText))
+        let prevButton = UIBarButtonItem(title: "< Prev", style: UIBarButtonItemStyle.plain, target: self, action: #selector(prevText))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
+        doneButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        nextButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        prevButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.sizeToFit()
+        toolBar.setItems([doneButton, flexibleSpace, prevButton, nextButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+
+        
         // UITextField (gradeCategoryText) specifications
         gradeCategoryText = UITextField(frame: CGRect(x: 30, y: customViewGrades.frame.height - 140, width: customViewGrades.frame.width - 60, height: 30))
         gradeCategoryText.backgroundColor = UIColor.white
         gradeCategoryText.placeholder = "Enter category name..."
         gradeCategoryText.delegate = self
+        gradeCategoryText.inputAccessoryView = toolBar
         gradeCategoryText.font = UIFont.systemFont(ofSize: 15)
         gradeCategoryText.borderStyle = UITextBorderStyle.roundedRect
         gradeCategoryText.autocorrectionType = UITextAutocorrectionType.no
@@ -253,6 +280,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeDistributionText = UITextField(frame: CGRect(x: 30, y: customViewGrades.frame.height - 90, width: customViewGrades.frame.width - 60, height: 30))
         gradeDistributionText.backgroundColor = UIColor.white
         gradeDistributionText.delegate = self
+        gradeDistributionText.inputAccessoryView = toolBar
         gradeDistributionText.placeholder = "Enter category percentage..."
         gradeDistributionText.font = UIFont.systemFont(ofSize: 15)
         gradeDistributionText.borderStyle = UITextBorderStyle.roundedRect
@@ -299,11 +327,30 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customView.addSubview(cancelButton)
         
         
+        // UIToolbar (toolBar) specifications
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        let nextButton = UIBarButtonItem(title: "Next >", style: UIBarButtonItemStyle.plain, target: self, action: #selector(nextText))
+        let prevButton = UIBarButtonItem(title: "< Prev", style: UIBarButtonItemStyle.plain, target: self, action: #selector(prevText))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
+        doneButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        nextButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        prevButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.sizeToFit()
+        toolBar.setItems([doneButton, flexibleSpace, prevButton, nextButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+
+        
         // UITextField (assignmentText) specifications
         assignmentText = UITextField(frame: CGRect(x: 30, y: 50, width: customView.frame.width - 60, height: 30))
         assignmentText.backgroundColor = UIColor.white
         assignmentText.placeholder = "Enter assignment..."
         assignmentText.delegate = self
+        assignmentText.inputAccessoryView = toolBar
         assignmentText.font = UIFont.systemFont(ofSize: 15)
         assignmentText.borderStyle = UITextBorderStyle.roundedRect
         assignmentText.autocorrectionType = UITextAutocorrectionType.no
@@ -314,20 +361,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customView.addSubview(assignmentText)
         
         // UITextField (categoryText) specifications
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
-        doneButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
-        let toolBar = UIToolbar()
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        toolBar.sizeToFit()
-        toolBar.setItems([doneButton], animated: false)
-        toolBar.isUserInteractionEnabled = true
-        
         categoryText = UITextField(frame: CGRect(x: 30, y: 100, width: customView.frame.width - 60, height: 30))
         categoryText.inputView = picker
         categoryText.delegate = self
         categoryText.inputAccessoryView = toolBar
-        categoryText.tintColor = UIColor.clear
+        //categoryText.tintColor = UIColor.clear
         categoryText.backgroundColor = UIColor.white
         categoryText.placeholder = "Enter category..."
         categoryText.font = UIFont.systemFont(ofSize: 15)
@@ -356,6 +394,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeText.delegate = self
         //gradeText.inputAccessoryView = toolBar
         gradeText.placeholder = "Enter grade..."
+        gradeText.inputAccessoryView = toolBar
         gradeText.font = UIFont.systemFont(ofSize: 15)
         gradeText.borderStyle = UITextBorderStyle.roundedRect
         gradeText.autocorrectionType = UITextAutocorrectionType.no
@@ -370,13 +409,21 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         let todaysDate = Date()
         datePicker.minimumDate = todaysDate
+        
         let doneButton1 = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
+        let nextButton1 = UIBarButtonItem(title: "Next >", style: UIBarButtonItemStyle.plain, target: self, action: #selector(nextText))
+        let prevButton1 = UIBarButtonItem(title: "< Prev", style: UIBarButtonItemStyle.plain, target: self, action: #selector(prevText))
+        let flexibleSpace1 = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
         doneButton1.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        nextButton1.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        prevButton1.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        
         let toolBar1 = UIToolbar()
         toolBar1.barStyle = UIBarStyle.default
         toolBar1.isTranslucent = true
         toolBar1.sizeToFit()
-        toolBar1.setItems([doneButton1], animated: false)
+        toolBar1.setItems([doneButton1, flexibleSpace1, prevButton1, nextButton1], animated: false)
         toolBar1.isUserInteractionEnabled = true
         
         dueDateText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
@@ -412,15 +459,70 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func donePicker() {
-        if categoryText.isFirstResponder {
+        if assignmentText.isFirstResponder {
+            assignmentText.resignFirstResponder()
+        } else if categoryText.isFirstResponder {
             categoryText.resignFirstResponder()
         } else if dueDateText.isFirstResponder {
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/yyyy"
             dueDateText.text = formatter.string(from: datePicker.date)
             dueDateText.resignFirstResponder()
+        } else if gradeText.isFirstResponder {
+            gradeText.resignFirstResponder()
+        }
+        
+        if gradeCategoryText.isFirstResponder {
+            gradeCategoryText.resignFirstResponder()
+        } else if gradeDistributionText.isFirstResponder {
+            gradeDistributionText.resignFirstResponder()
         }
     }
+    
+    func nextText() {
+        if self.assignmentText.isFirstResponder {
+            self.categoryText.becomeFirstResponder()
+        } else if self.categoryText.isFirstResponder {
+            if self.radioButton.isOn {
+                self.gradeText.becomeFirstResponder()
+            } else {
+                self.dueDateText.becomeFirstResponder()
+            }
+        } else if self.gradeText.isFirstResponder {
+            self.gradeText.resignFirstResponder()
+        } else if self.dueDateText.isFirstResponder {
+            self.dueDateText.resignFirstResponder()
+        }
+        
+        if self.gradeCategoryText.isFirstResponder {
+            self.gradeDistributionText.becomeFirstResponder()
+        } else if gradeDistributionText.isFirstResponder {
+            gradeDistributionText.resignFirstResponder()
+        }
+    }
+    
+    func prevText() {
+        if self.assignmentText.isFirstResponder {
+            self.assignmentText.resignFirstResponder()
+        } else if self.categoryText.isFirstResponder {
+            self.assignmentText.becomeFirstResponder()
+        } else if self.radioButton.isOn {
+            if self.gradeText.isFirstResponder {
+                self.categoryText.becomeFirstResponder()
+            }
+        } else if !self.radioButton.isOn {
+            if self.dueDateText.isFirstResponder {
+                self.categoryText.becomeFirstResponder()
+            }
+        }
+        
+        if self.gradeCategoryText.isFirstResponder {
+            self.gradeCategoryText.resignFirstResponder()
+        } else if self.gradeDistributionText.isFirstResponder {
+            self.gradeCategoryText.becomeFirstResponder()
+        }
+    }
+
     
     func dateChanged(_ sender: UIDatePicker) {
         let formatter = DateFormatter()
@@ -560,6 +662,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.gradeText.isHidden = false
             self.radioButton.setOn(true, animated: false)
             self.picker.selectRow(0, inComponent: 0, animated: false)
+            let todaysDate = Date()
+            self.datePicker.setDate(todaysDate, animated: false)
             
             addAssignmentButton.isEnabled = true
             calculateGradeButton.isEnabled = true
@@ -689,7 +793,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryText {
             if categoryText.text?.characters.count == 0 {
-                categoryText.text = pickerData[0]
+                if pickerData.count > 0 {
+                    categoryText.text = pickerData[0]
+                }
             }
         } else if textField == dueDateText {
             let todaysDate = Date()

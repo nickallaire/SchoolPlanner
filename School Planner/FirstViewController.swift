@@ -45,7 +45,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.fillerLabel.backgroundColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
         
-        //self.listOfClasses.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell")
         self.listOfClasses.rowHeight = 75
         self.listOfClasses.delegate = self
         self.listOfClasses.dataSource = self
@@ -165,6 +164,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             let desView : ThirdViewController = (tabBarC.viewControllers?.first as? ThirdViewController)!
             let tableIndex = listOfClasses.indexPathForSelectedRow?.row
             desView.className = tableData[tableIndex!]
+            desView.classLocation = locationData[tableIndex!]
+            desView.classDayTime = dayTimeData[tableIndex!]
             self.navigationController?.pushViewController(desView, animated: true)
         }
     }
@@ -242,6 +243,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
             self.tableData.remove(at: indexPath.row)
+            self.locationData.remove(at: indexPath.row)
+            self.dayTimeData.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
             writeToPreferences()
         }
@@ -293,7 +296,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y == 0{
-                self.view.frame.origin.y -= 175
+                self.view.frame.origin.y -= 225
             }
         }
         
@@ -302,7 +305,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func keyboardWillHide(notification: NSNotification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y != 0 {
-                self.view.frame.origin.y += 175
+                self.view.frame.origin.y += 225
             }
         }
     }
