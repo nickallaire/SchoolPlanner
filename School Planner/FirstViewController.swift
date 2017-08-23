@@ -93,6 +93,10 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.classDayTime.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
         self.classLocation.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
         
+        self.classTextEdit.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        self.classDayTime.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        self.classLocation.contentVerticalAlignment = UIControlContentVerticalAlignment.center
+        
         self.addClassButton.layer.cornerRadius = 5
         self.addClassButton.layer.borderWidth = 1
         self.addClassButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor

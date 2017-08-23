@@ -353,7 +353,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         assignmentText.inputAccessoryView = toolBar
         assignmentText.font = UIFont.systemFont(ofSize: 15)
         assignmentText.borderStyle = UITextBorderStyle.roundedRect
-        assignmentText.autocorrectionType = UITextAutocorrectionType.no
+        assignmentText.autocorrectionType = UITextAutocorrectionType.yes
         assignmentText.keyboardType = UIKeyboardType.default
         assignmentText.returnKeyType = UIReturnKeyType.done
         assignmentText.clearButtonMode = UITextFieldViewMode.whileEditing;
@@ -911,7 +911,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         preferences.set(data, forKey: currentKey)
         let didSave = preferences.synchronize()
         if !didSave {
-            
+            debugPrint("FAILED: " + key)
         }
     }
     
