@@ -45,7 +45,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         self.fillerLabel.backgroundColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
         
-        self.listOfClasses.rowHeight = 75
+        self.listOfClasses.rowHeight = 60
         self.listOfClasses.delegate = self
         self.listOfClasses.dataSource = self
         
