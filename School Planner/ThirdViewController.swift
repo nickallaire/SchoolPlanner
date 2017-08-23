@@ -9,14 +9,18 @@
 import UIKit
 
 class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate {
+    
+    // Story board variables
+    
     @IBOutlet weak var dayTimeText: UILabel!
     @IBOutlet weak var locationText: UILabel!
-
-    @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var gradeLabel: UILabel!
+    
+    @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var calculateGradeButton: UIButton!
     
     @IBOutlet weak var listOfAssignments: UITableView!
+    
     @IBOutlet weak var bbItem: UIBarButtonItem!
     @IBOutlet weak var gbItem: UIBarButtonItem!
     @IBOutlet weak var nItem: UINavigationItem!
@@ -28,35 +32,47 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var gradeDistributionText: UITextField!
     @IBOutlet weak var gradeCategoryText: UITextField!
     
+    
+    // local variables
+    
     var className = String()
     var classLocation = String()
     var classDayTime = String()
+    var oldValue = String()
+    
     var tableData = [String]()
     var gradeTableData = [String]()
+    
     var edittingIndex = 0
     var amEdittingCell = false
     
     var customView: UIView!
     var customViewGrades: UIView!
+    
     var listOfGradeDistributions: UITableView!
+    
     var assignmentLabel: UILabel!
     var gradedLabel: UILabel!
+    
     var dueDateText: UITextField!
+    
     var radioButton: UISwitch!
     
     var picker = UIPickerView()
-    var datePicker = UIDatePicker()
     var pickerData = [String]()
-    var oldValue = String()
+    
+    var datePicker = UIDatePicker()
     
     var alert: UIAlertController!
 
+    
+    /* View loads for first time */
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-
+        
         // Navigation Item customization
         self.nItem.title = className
         self.bbItem.title = "Back"
@@ -71,17 +87,18 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Initializing UITableView
         self.listOfAssignments.delegate = self
         self.listOfAssignments.dataSource = self
-        //self.listOfAssignments.register(UITableViewCell.self, forCellReuseIdentifier: "assignmentCell")
         self.listOfAssignments.rowHeight = 60
         
+        // Initializing UIPickers
         self.picker.showsSelectionIndicator = true
         self.picker.delegate = self
-        
         self.datePicker.datePickerMode = .date
         
+        // Initialize Custom Sub Views
         customViewFunc()
         customViewFuncGrades()
         
+        // Initialize Class Data
         self.tableData = readFromPreferences(key: "Assignments")
         self.gradeTableData = readFromPreferences(key: "GradeDistributions")
         self.pickerData = readFromPreferences(key: "PickerData")
@@ -109,11 +126,17 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfGradeDistributions.addGestureRecognizer(longPressRecognizer1)
     }
     
+    
+    /* Memory warning code */
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
         
     }
+    
+    
+    /* View comes back onto screen */
     
     override func viewWillAppear(_ animated: Bool) {
         self.nBar.barTintColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
@@ -121,6 +144,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.gbItem.tintColor = UIColor.white
         animateTable()
     }
+    
+    
+    /* Animate table so cells come up from bottom of screen */
     
     func animateTable() {
         listOfAssignments.reloadData()
@@ -145,16 +171,23 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /* Long press on assignment list UITableView */
+    
     func longPressAssignments(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        
         if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
             let touchPoint = longPressGestureRecognizer.location(in: self.listOfAssignments)
+           
             if let indexPath = listOfAssignments.indexPathForRow(at: touchPoint) {
+                
                 let tableText = tableData[indexPath.row]
                 let distributionArray : [String] = tableText.components(separatedBy: "|")
                 self.assignmentText.text = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
                 self.categoryText.text = distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
                 self.oldValue = self.assignmentText.text!
                 let charSet = CharacterSet(charactersIn: "/")
+                
                 if distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces).rangeOfCharacter(from: charSet) == nil {
                     self.radioButton.setOn(true, animated: false)
                     self.gradeText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
@@ -164,6 +197,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                     self.dueDateText.isHidden = false
                     self.dueDateText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
                 }
+                
                 customView.isHidden = false
                 addAssignmentButton.isEnabled = false
                 calculateGradeButton.isEnabled = false
@@ -178,10 +212,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /* Long press on grade distribution list UITableView */
+    
     func longPressGradeDistributions(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        
         if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
             let touchPoint = longPressGestureRecognizer.location(in: self.listOfGradeDistributions)
+            
             if let indexPath = listOfGradeDistributions.indexPathForRow(at: touchPoint) {
+                
                 let tableText = gradeTableData[indexPath.row]
                 let distributionArray : [String] = tableText.components(separatedBy: "|")
                 self.gradeCategoryText.text = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
@@ -200,6 +240,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
         }
     }
+    
+    
+    /*** Grade Distributions UIView ***/
     
     func customViewFuncGrades() {
         
@@ -296,6 +339,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
+    
+    /*** Assignment UIView ***/
+    
     func customViewFunc() {
         
         // UIView specifications
@@ -363,12 +409,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         assignmentText.contentVerticalAlignment = UIControlContentVerticalAlignment.center
         customView.addSubview(assignmentText)
         
+        
         // UITextField (categoryText) specifications
         categoryText = UITextField(frame: CGRect(x: 30, y: 100, width: customView.frame.width - 60, height: 30))
         categoryText.inputView = picker
         categoryText.delegate = self
         categoryText.inputAccessoryView = toolBar
-        //categoryText.tintColor = UIColor.clear
         categoryText.backgroundColor = UIColor.white
         categoryText.placeholder = "Enter category..."
         categoryText.font = UIFont.systemFont(ofSize: 15)
@@ -395,7 +441,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         gradeText.backgroundColor = UIColor.white
         gradeText.delegate = self
-        //gradeText.inputAccessoryView = toolBar
         gradeText.placeholder = "Enter grade..."
         gradeText.inputAccessoryView = toolBar
         gradeText.font = UIFont.systemFont(ofSize: 15)
@@ -408,11 +453,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         gradeText.isHidden = false
         customView.addSubview(gradeText)
 
-        // UITextField (dueDateText) specifications
+        
+        // UIDatePicker (datePicker) specifications
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         let todaysDate = Date()
         datePicker.minimumDate = todaysDate
         
+        
+        // UIToolBar (toolBar1) specifications
         let doneButton1 = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(donePicker))
         let nextButton1 = UIBarButtonItem(title: "Next >", style: UIBarButtonItemStyle.plain, target: self, action: #selector(nextText))
         let prevButton1 = UIBarButtonItem(title: "< Prev", style: UIBarButtonItemStyle.plain, target: self, action: #selector(prevText))
@@ -429,6 +477,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         toolBar1.setItems([doneButton1, flexibleSpace1, prevButton1, nextButton1], animated: false)
         toolBar1.isUserInteractionEnabled = true
         
+        
+        // UITextField (dueDateText) specifications
         dueDateText = UITextField(frame: CGRect(x: 30, y: 150, width: customView.frame.width - 60, height: 30))
         dueDateText.inputView = datePicker
         dueDateText.backgroundColor = UIColor.white
@@ -445,12 +495,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         dueDateText.isHidden = true
         customView.addSubview(dueDateText)
         
+        
         // UILabel (assignmentLabel) specifications
         assignmentLabel = UILabel() as UILabel
         assignmentLabel.frame = CGRect(x: (customView.frame.width / 2) - 74, y: 15, width: 148, height: 30)
         assignmentLabel?.text = "Assignment Details"
         assignmentLabel?.textColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         customView!.addSubview(assignmentLabel)
+        
         
         // UILabel (gradedLabel) specifications
         gradedLabel = UILabel() as UILabel
@@ -461,15 +513,24 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
+    
+    /* Displays alert message for wrong data */
+    
     func showAlertMessage(title: String, message: String) {
         self.alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         self.present(self.alert, animated: true, completion: nil)
         Timer.scheduledTimer(timeInterval: 1.75, target: self, selector: #selector(dismissAlert), userInfo: nil, repeats: false)
     }
     
+    
+    /* Dismisses displayed alert */
+    
     func dismissAlert() {
         self.alert.dismiss(animated: true, completion: nil)
     }
+    
+    
+    /* Done button on UIToolBar pressed */
     
     func donePicker() {
         if assignmentText.isFirstResponder {
@@ -492,6 +553,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /* Go to next UITextField */
+    
     func nextText() {
         if self.assignmentText.isFirstResponder {
             self.categoryText.becomeFirstResponder()
@@ -513,6 +577,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             gradeDistributionText.resignFirstResponder()
         }
     }
+    
+    
+    /* Go to previous UITextField */
     
     func prevText() {
         if self.assignmentText.isFirstResponder {
@@ -537,11 +604,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     
+    /* Puts selected date in UITextField */
+    
     func dateChanged(_ sender: UIDatePicker) {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
         dueDateText.text = formatter.string(from: datePicker.date)
     }
+    
+    
+    /* Changes UITextField when UISwitch toggled on/off */
     
     func switchChanged() {
         if radioButton.isOn {
@@ -560,6 +632,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
         }
     }
+    
+    
+    /* Checks category percentage doesn't exceed 100% */
     
     func checkCategoryPercentage(percentage: String, category: String) -> Bool {
         var total = 0.0
@@ -587,6 +662,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /* Checks if duplicate category is added */
+    
     func checkDuplicateCategory(category: String) -> Bool {
         for c in gradeTableData {
             let array : [String] = c.components(separatedBy: "|")
@@ -605,6 +683,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         return false
     }
+    
+    
+    /* Checks if duplicate assignment is added */
     
     func checkDuplicateAssignment(assignment: String) -> Bool {
         for a in tableData {
@@ -627,9 +708,15 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         return true
     }
     
+    
+    /* Go back to FirstViewController */
+    
     @IBAction func bbItemPressed(_ sender: AnyObject) {
         self.dismiss(animated: true, completion: nil);
     }
+    
+    
+    /* UI changes when Distributions button pressed */
     
     @IBAction func gradeButtonPressed(_ sender: Any) {
         customViewGrades.isHidden = false
@@ -642,6 +729,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
     }
     
+    
+    /* UI changes when Assignments button pressed */
+    
     @IBAction func addAssignmentButtonPressed(_ sender: AnyObject) {
         customView.isHidden = false
         addAssignmentButton.isEnabled = false
@@ -652,6 +742,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         addAssignmentButton.layer.borderColor = UIColor.lightGray.cgColor
         calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
     }
+    
+    
+    /* Calculates current grade based on assignments that have a score */
     
     @IBAction func calculateGradeButtonPressed(_ sender: AnyObject) {
         var totalGrade = 0.0
@@ -701,6 +794,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             gradeLabel.text = "0.00%"
         }
     }
+    
+    
+    /* Error check user data and if valid, store in arrays and UserDefaults; set all UI elements
+       back to correct colors when adding new assignments */
     
     func okayButtonPressed(sender: UIButton) {
         if self.assignmentText.text?.characters.count != 0 && self.categoryText.text?.characters.count != 0 && (self.gradeText.text?.characters.count != 0 || self.dueDateText.text?.characters.count != 0){
@@ -768,6 +865,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             showAlertMessage(title: "Invalid Assignment", message: "Make sure all fields are completed.")
         }
     }
+    
+    
+    /* Error check user data and if valid, store in arrays; clear UITextFields when
+       adding new grade distributions */
     
     func okayButtonGradesPressed(sender: UIButton) {
         var okay = false
@@ -868,6 +969,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /* Clear all UITextFields, initialize UIPicker to first selection,
+       put color back into all UI elements when either cancel button is pressed */
+    
     func cancelButtonPressed(sender: UIButton) {
         self.assignmentText.text = ""
         self.categoryText.text = ""
@@ -898,14 +1003,25 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customViewGrades.isHidden = true
     }
     
+    
+    /* Not sure what this does */
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
+    
+    
+    /****** UITextField Delegate Function ******/
+    /* Close keyboard when click off screen */
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+    
+    /****** UITextField Delegate Function ******/
+    /* Initializes UITextField with first item in UIPickerView */
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryText {
@@ -922,6 +1038,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /****** UITextField Delegate Function ******/
+    /* Checks if only 1 period in grade score/distribution */
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == gradeText || textField == gradeDistributionText {
             let countdots = textField.text?.components(separatedBy: ".")
@@ -933,21 +1053,33 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         return true
     }
     
+    
+    /****** UIPickerView Delegate Function ******/
+    /* Returns number of components in UIPickerView */
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
+    
+    
+    /****** UIPickerView Delegate Function ******/
+    /* Returns number of rows in components in UIPickerView */
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return pickerData.count;
     }
     
+    
+    /****** UIPickerView Delegate Function ******/
+    /* Returns titleRow for UIPIckerView */
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return pickerData[row]
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
+    
+    /****** UIPickerView Delegate Function ******/
+    /* Put data in UITextField from UIPickerView selection */
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == picker {
@@ -963,6 +1095,18 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /****** UITableView Delegate Function ******/
+    /* Returns number of sections in UITableView */
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    
+    /****** UITableView Delegate Function ******/
+    /* Returns number of rows in UITableViews */
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == listOfAssignments {
             return self.tableData.count
@@ -970,6 +1114,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             return self.gradeTableData.count
         }
     }
+    
+    
+    /****** UITableView Delegate Function ******/
+    /* Add data to cells of UITableView from arrays */
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == listOfGradeDistributions {
@@ -979,7 +1127,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             return cell
         } else {
             let cell : AssignmentTableViewCell = listOfAssignments.dequeueReusableCell(withIdentifier: "assignmentCell", for: indexPath) as! AssignmentTableViewCell
-            //cell.textLabel?.text = self.tableData[indexPath.row]
             let array: [String] = self.tableData[indexPath.row].components(separatedBy: "|")
             let assignment = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
             let category = array[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
@@ -999,6 +1146,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         
     }
+    
+    
+    /****** UITableView Delegate Function ******/
+    /* Delete cells from UITableView listOfAssignments and listOfGradeDistributions */
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
@@ -1033,9 +1184,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    
+    /****** UITableView Delegate Function ******/
+    /* deselects row after you click on it */
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
     }
+    
+    
+    /****** Save data when added/editted ******/
     
     func writeToPreferences(key: String, data: [String]) {
         let preferences = UserDefaults.standard
@@ -1046,6 +1204,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             debugPrint("FAILED: " + key)
         }
     }
+    
+    
+    /****** Read data to initialize arrays ******/
     
     func readFromPreferences(key: String) -> [String] {
         let preferences = UserDefaults.standard
