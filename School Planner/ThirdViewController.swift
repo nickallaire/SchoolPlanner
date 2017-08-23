@@ -742,11 +742,21 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     func okayButtonGradesPressed(sender: UIButton) {
         var okay = false
         var duplicate = false
+        var zero = false
         if self.gradeDistributionText.text?.characters.count != 0 && self.gradeCategoryText.text?.characters.count != 0 {
             duplicate = checkDuplicateCategory(category: gradeCategoryText.text!)
             if !duplicate {
                 okay = checkCategoryPercentage(percentage: self.gradeDistributionText.text!, category: gradeCategoryText.text!)
+                
+                let num = Double(gradeDistributionText.text!)!
+                if num > 0.0 {
+                    zero = false
+                } else {
+                    zero = true
+                    okay = false
+                }
             }
+            
             if okay {
                 if !amEdittingCell {
                     let newString = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
@@ -817,7 +827,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             } else {
                 if duplicate {
                     showAlertMessage(title: "Category name already exists.", message: "")
-
+                } else if zero {
+                    showAlertMessage(title: "Category value must be > 0.", message: "")
                 } else {
                     showAlertMessage(title: "Invalid Data", message: "Category Percentage exceeds 100%")
                 }
