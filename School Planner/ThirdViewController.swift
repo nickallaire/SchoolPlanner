@@ -152,11 +152,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 let distributionArray : [String] = tableText.components(separatedBy: "|")
                 self.assignmentText.text = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
                 self.categoryText.text = distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                self.oldValue = self.assignmentText.text!
                 let charSet = CharacterSet(charactersIn: "/")
                 if distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces).rangeOfCharacter(from: charSet) == nil {
                     self.radioButton.setOn(true, animated: false)
                     self.gradeText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
-
                 } else {
                     self.radioButton.setOn(false, animated: false)
                     self.gradeText.isHidden = true
@@ -591,10 +591,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             let array : [String] = c.components(separatedBy: "|")
             let temp = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
             let cat = category.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+            let old = oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
             if cat == temp {
-                if cat == oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() && amEdittingCell {
+                if cat == old && amEdittingCell {
                     return false
-                } else if cat != oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() && amEdittingCell {
+                } else if cat != old && amEdittingCell {
                     return true
                 } else if !amEdittingCell {
                     return true
@@ -602,6 +603,27 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
         }
         return false
+    }
+    
+    func checkDuplicateAssignment(assignment: String) -> Bool {
+        for a in tableData {
+            let array : [String] = a.components(separatedBy: "|")
+            let temp = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+            let assgn = assignment.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+            let old = oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+            if assgn == temp {
+                if assgn == old && amEdittingCell{
+                    return true
+                } else if assgn != old && amEdittingCell {
+                    return false
+                } else if !amEdittingCell {
+                    return false
+                }
+            }
+        }
+        
+        
+        return true
     }
     
     @IBAction func bbItemPressed(_ sender: AnyObject) {
@@ -681,59 +703,66 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func okayButtonPressed(sender: UIButton) {
         if self.assignmentText.text?.characters.count != 0 && self.categoryText.text?.characters.count != 0 && (self.gradeText.text?.characters.count != 0 || self.dueDateText.text?.characters.count != 0){
-            if !amEdittingCell {
-                var newString = ""
-                if self.gradeText.text?.characters.count != 0 {
-                    newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
+            var okay = false
+            okay = checkDuplicateAssignment(assignment: self.assignmentText.text!)
+            
+            if okay {
+                if !amEdittingCell {
+                    var newString = ""
+                    if self.gradeText.text?.characters.count != 0 {
+                        newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
 
+                    } else {
+                        newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.dueDateText.text!
+
+                    }
+                    self.tableData.append(newString)
+                    self.listOfAssignments.beginUpdates()
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    self.listOfAssignments.numberOfRows(inSection: tableData.count)
+                    self.listOfAssignments.cellForRow(at: indexPath)
+                    self.listOfAssignments.insertRows(at: [indexPath], with: .automatic)
+                    self.listOfAssignments.endUpdates()
+                    self.listOfAssignments.reloadData()
                 } else {
-                    newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.dueDateText.text!
+                    if self.gradeText.text?.characters.count != 0 {
+                        self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
 
+                    } else {
+                        self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.dueDateText.text!
+
+                    }
+                    self.amEdittingCell = false
+                    self.listOfAssignments.reloadData()
                 }
-                self.tableData.append(newString)
-                self.listOfAssignments.beginUpdates()
-                let indexPath = IndexPath(row: 0, section: 0)
-                self.listOfAssignments.numberOfRows(inSection: tableData.count)
-                self.listOfAssignments.cellForRow(at: indexPath)
-                self.listOfAssignments.insertRows(at: [indexPath], with: .automatic)
-                self.listOfAssignments.endUpdates()
-                self.listOfAssignments.reloadData()
+                
+                self.assignmentText.text = ""
+                self.categoryText.text = ""
+                self.gradeText.text = ""
+                self.dueDateText.text = ""
+                self.dueDateText.isHidden = true
+                self.gradeText.isHidden = false
+                self.radioButton.setOn(true, animated: false)
+                self.picker.selectRow(0, inComponent: 0, animated: false)
+                let todaysDate = Date()
+                self.datePicker.setDate(todaysDate, animated: false)
+                
+                addAssignmentButton.isEnabled = true
+                calculateGradeButton.isEnabled = true
+                bbItem.isEnabled = true
+                gbItem.isEnabled = true
+                listOfAssignments.isUserInteractionEnabled = true
+                addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+                calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+
+                writeToPreferences(key: "Assignments", data: self.tableData)
+                
+                self.view.endEditing(true)
+                
+                customView.isHidden = true
             } else {
-                if self.gradeText.text?.characters.count != 0 {
-                    self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
-
-                } else {
-                    self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.dueDateText.text!
-
-                }
-                self.amEdittingCell = false
-                self.listOfAssignments.reloadData()
+                showAlertMessage(title: "Assignment name already exists", message: "")
             }
-            
-            self.assignmentText.text = ""
-            self.categoryText.text = ""
-            self.gradeText.text = ""
-            self.dueDateText.text = ""
-            self.dueDateText.isHidden = true
-            self.gradeText.isHidden = false
-            self.radioButton.setOn(true, animated: false)
-            self.picker.selectRow(0, inComponent: 0, animated: false)
-            let todaysDate = Date()
-            self.datePicker.setDate(todaysDate, animated: false)
-            
-            addAssignmentButton.isEnabled = true
-            calculateGradeButton.isEnabled = true
-            bbItem.isEnabled = true
-            gbItem.isEnabled = true
-            listOfAssignments.isUserInteractionEnabled = true
-            addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
-            calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
-
-            writeToPreferences(key: "Assignments", data: self.tableData)
-            
-            self.view.endEditing(true)
-            
-            customView.isHidden = true
         } else {
             showAlertMessage(title: "Invalid Assignment", message: "Make sure all fields are completed.")
         }
@@ -830,7 +859,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 } else if zero {
                     showAlertMessage(title: "Category value must be > 0.", message: "")
                 } else {
-                    showAlertMessage(title: "Invalid Data", message: "Category Percentage exceeds 100%")
+                    showAlertMessage(title: "Category Percentage exceeds 100%", message: "")
                 }
             }
         } else {
