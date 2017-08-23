@@ -564,11 +564,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         var total = 0.0
         for c in gradeTableData {
             let array : [String] = c.components(separatedBy: "|")
-            let cat = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
+            let cat = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
             let num = array[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
-            if !(amEdittingCell && cat == category) {
-                total += Double(num)!
-
+            if cat == category {
+                total += 0
+            } else {
+                if amEdittingCell && cat == oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() {
+                    total += 0
+                } else {
+                    total += Double(num)!
+                }
             }
             debugPrint("num: " + num)
         }
@@ -579,6 +584,24 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             return false
         }
+    }
+    
+    func checkDuplicateCategory(category: String) -> Bool {
+        for c in gradeTableData {
+            let array : [String] = c.components(separatedBy: "|")
+            let temp = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+            let cat = category.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+            if cat == temp {
+                if cat == oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() && amEdittingCell {
+                    return false
+                } else if cat != oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() && amEdittingCell {
+                    return true
+                } else if !amEdittingCell {
+                    return true
+                }
+            }
+        }
+        return false
     }
     
     @IBAction func bbItemPressed(_ sender: AnyObject) {
@@ -648,7 +671,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             if total != 0 {
                 gradeLabel.text = String(final / total) + "%"
             } else {
-                showAlertMessage(title: "", message: "Nothing is graded.")
+                showAlertMessage(title: "Nothing is graded.", message: "")
             }
             
         } else {
@@ -718,8 +741,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func okayButtonGradesPressed(sender: UIButton) {
         var okay = false
+        var duplicate = false
         if self.gradeDistributionText.text?.characters.count != 0 && self.gradeCategoryText.text?.characters.count != 0 {
-            okay = checkCategoryPercentage(percentage: self.gradeDistributionText.text!, category: gradeCategoryText.text!)
+            duplicate = checkDuplicateCategory(category: gradeCategoryText.text!)
+            if !duplicate {
+                okay = checkCategoryPercentage(percentage: self.gradeDistributionText.text!, category: gradeCategoryText.text!)
+            }
             if okay {
                 if !amEdittingCell {
                     let newString = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
@@ -788,7 +815,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 customViewGrades.isHidden = true
                 
             } else {
-                showAlertMessage(title: "Invalid Data", message: "Category Percentage exceeds 100%")
+                if duplicate {
+                    showAlertMessage(title: "Category name already exists.", message: "")
+
+                } else {
+                    showAlertMessage(title: "Invalid Data", message: "Category Percentage exceeds 100%")
+                }
             }
         } else {
             showAlertMessage(title: "Invalid Category", message: "Make sure all fields are completed.")
