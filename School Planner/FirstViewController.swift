@@ -122,11 +122,9 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func doneText() {
         if self.classTextEdit.isFirstResponder {
             self.classTextEdit.resignFirstResponder()
-        }
-        if self.classDayTime.isFirstResponder {
+        } else if self.classDayTime.isFirstResponder {
             self.classDayTime.resignFirstResponder()
-        }
-        if self.classLocation.isFirstResponder {
+        } else if self.classLocation.isFirstResponder {
             self.classLocation.resignFirstResponder()
         }
     }
@@ -153,9 +151,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        //self.navBar.barTintColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
-        //listOfClasses.reloadData()
         animateTable()
     }
     
@@ -268,7 +263,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         self.performSegue(withIdentifier: thirdViewSegue, sender: indexPath)
     }
     
@@ -316,7 +310,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.view.frame.origin.y -= 225
             }
         }
-        
     }
     
     func keyboardWillHide(notification: NSNotification) {
@@ -326,7 +319,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
         }
     }
-    
 }
 
 

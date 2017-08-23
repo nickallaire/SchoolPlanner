@@ -560,6 +560,27 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    func checkCategoryPercentage(percentage: String, category: String) -> Bool {
+        var total = 0.0
+        for c in gradeTableData {
+            let array : [String] = c.components(separatedBy: "|")
+            let cat = array[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
+            let num = array[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
+            if !(amEdittingCell && cat == category) {
+                total += Double(num)!
+
+            }
+            debugPrint("num: " + num)
+        }
+        
+        let tempTotal = total + Double(percentage.trimmingCharacters(in: NSCharacterSet.whitespaces))!
+        if tempTotal <= 100 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     @IBAction func bbItemPressed(_ sender: AnyObject) {
         self.dismiss(animated: true, completion: nil);
     }
@@ -589,6 +610,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBAction func calculateGradeButtonPressed(_ sender: AnyObject) {
         var totalGrade = 0.0
         var totalCategory = 0.0
+        var total = 0.0
         var gradeArray = [[String]]()
         if gradeTableData.count != 0 || tableData.count != 0 {
             for i in gradeTableData {
@@ -612,26 +634,25 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                         }
                     }
                 }
-//                debugPrint((Double(totalCategory) / Double(count)) * Double(distributionArray[1])! * 0.01)
                 
                 row.append(String((Double(totalCategory) / Double(count)) * Double(distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces))! * 0.01))
                 gradeArray.append(row)
                 
                 if count != 0 {
                     totalGrade += (Double(totalCategory) / Double(count)) * Double(distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces))! * 0.01
+                    total += Double(distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces))!
                 }
             }
-            debugPrint("total " + String(totalGrade))
             
-            let final = round(Double(totalGrade / 0.01)) * 0.01
-            gradeLabel.text = String(final) + "%"
+            let final = round(Double(totalGrade / 0.01))
+            if total != 0 {
+                gradeLabel.text = String(final / total) + "%"
+            } else {
+                showAlertMessage(title: "", message: "Nothing is graded.")
+            }
             
         } else {
             gradeLabel.text = "0.00%"
-        }
-        
-        for d in gradeArray {
-            debugPrint(d)
         }
     }
     
@@ -696,72 +717,79 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func okayButtonGradesPressed(sender: UIButton) {
+        var okay = false
         if self.gradeDistributionText.text?.characters.count != 0 && self.gradeCategoryText.text?.characters.count != 0 {
-            if !amEdittingCell {
-                let newString = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
-                self.gradeTableData.append(newString)
-                listOfGradeDistributions.beginUpdates()
-                let indexPath = IndexPath(row: 0, section: 0)
-                listOfGradeDistributions.numberOfRows(inSection: gradeTableData.count)
-                listOfGradeDistributions.cellForRow(at: indexPath)
-                listOfGradeDistributions.insertRows(at: [indexPath], with: .automatic)
-                listOfGradeDistributions.endUpdates()
-                listOfGradeDistributions.reloadData()
-            } else {
-                self.gradeTableData[edittingIndex] = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
-                self.listOfGradeDistributions.reloadData()
+            okay = checkCategoryPercentage(percentage: self.gradeDistributionText.text!, category: gradeCategoryText.text!)
+            if okay {
+                if !amEdittingCell {
+                    let newString = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
+                    self.gradeTableData.append(newString)
+                    listOfGradeDistributions.beginUpdates()
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    listOfGradeDistributions.numberOfRows(inSection: gradeTableData.count)
+                    listOfGradeDistributions.cellForRow(at: indexPath)
+                    listOfGradeDistributions.insertRows(at: [indexPath], with: .automatic)
+                    listOfGradeDistributions.endUpdates()
+                    listOfGradeDistributions.reloadData()
+                } else {
+                    self.gradeTableData[edittingIndex] = self.gradeCategoryText.text! + " | " + self.gradeDistributionText.text!
+                    self.listOfGradeDistributions.reloadData()
+                    
+                    // Reload assignmentTable with new value
+                    var i = 0;
+                    for cell in tableData {
+                        let assignmentArray : [String] = cell.components(separatedBy: "|")
+                        let aa = assignmentArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+                        if aa == oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() {
+                            tableData[i] = assignmentArray[0] + "| " + self.gradeCategoryText.text! + " |" + assignmentArray[2]
+                        }
+                        i += 1
+                    }
+                    self.listOfAssignments.reloadData()
+                }
                 
-                // Reload assignmentTable with new value
-                var i = 0;
-                for cell in tableData {
-                    let assignmentArray : [String] = cell.components(separatedBy: "|")
-                    let aa = assignmentArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
-                    if aa == oldValue.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() {
-                        tableData[i] = assignmentArray[0] + "| " + self.gradeCategoryText.text! + " |" + assignmentArray[2]
-                    }
-                    i += 1
-                }
-                self.listOfAssignments.reloadData()
-            }
-            
-            var notNew = false
-            if amEdittingCell {
-                self.amEdittingCell = false
-                for data in gradeTableData {
-                    let distributionsArray : [String] = data.components(separatedBy: "|")
-                    let da = distributionsArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
-                    if da == self.gradeCategoryText.text?.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() {
-                        notNew = true
-                        pickerData[edittingIndex] = self.gradeCategoryText.text!
-                        writeToPreferences(key: "PickerData", data: self.pickerData)
-                        break
+                var notNew = false
+                if amEdittingCell {
+                    self.amEdittingCell = false
+                    for data in gradeTableData {
+                        let distributionsArray : [String] = data.components(separatedBy: "|")
+                        let da = distributionsArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased()
+                        if da == self.gradeCategoryText.text?.trimmingCharacters(in: NSCharacterSet.whitespaces).lowercased() {
+                            notNew = true
+                            pickerData[edittingIndex] = self.gradeCategoryText.text!
+                            writeToPreferences(key: "PickerData", data: self.pickerData)
+                            break
+                        }
                     }
                 }
+                
+                if !notNew {
+                    pickerData.append(self.gradeCategoryText.text!)
+                    writeToPreferences(key: "PickerData", data: self.pickerData)
+                }
+                
+                addAssignmentButton.isEnabled = true
+                calculateGradeButton.isEnabled = true
+                bbItem.isEnabled = true
+                gbItem.isEnabled = true
+                listOfAssignments.isUserInteractionEnabled = true
+                addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+                calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+                
+                self.gradeDistributionText.text = ""
+                self.gradeCategoryText.text = ""
+                
+                writeToPreferences(key: "GradeDistributions", data: self.gradeTableData)
+                
+                listOfGradeDistributions.setContentOffset(.zero, animated: false)
+                
+                self.view.endEditing(true)
+                
+                customViewGrades.isHidden = true
+                
+            } else {
+                showAlertMessage(title: "Invalid Data", message: "Category Percentage exceeds 100%")
             }
-            
-            if !notNew {
-                pickerData.append(self.gradeCategoryText.text!)
-                writeToPreferences(key: "PickerData", data: self.pickerData)
-            }
-            
-            addAssignmentButton.isEnabled = true
-            calculateGradeButton.isEnabled = true
-            bbItem.isEnabled = true
-            gbItem.isEnabled = true
-            listOfAssignments.isUserInteractionEnabled = true
-            addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
-            calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
-            
-            self.gradeDistributionText.text = ""
-            self.gradeCategoryText.text = ""
-            
-            writeToPreferences(key: "GradeDistributions", data: self.gradeTableData)
-            
-            listOfGradeDistributions.setContentOffset(.zero, animated: false)
-            
-            self.view.endEditing(true)
-            
-            customViewGrades.isHidden = true
         } else {
             showAlertMessage(title: "Invalid Category", message: "Make sure all fields are completed.")
         }
