@@ -1031,10 +1031,12 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
             }
         } else if textField == dueDateText {
-            let todaysDate = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MM/dd/yyyy"
-            dueDateText.text = formatter.string(from: todaysDate)
+            if dueDateText.text?.characters.count == 0 {
+                let todaysDate = Date()
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MM/dd/yyyy"
+                dueDateText.text = formatter.string(from: todaysDate)
+            }
         }
     }
     
@@ -1087,6 +1089,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 categoryText.text = pickerData[row]
             }
         } else if pickerView == datePicker { // check this
+            
             let timeFormatter = DateFormatter()
             timeFormatter.timeStyle = DateFormatter.Style.short
             let strDate = timeFormatter.string(from: datePicker.date)
