@@ -49,6 +49,9 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfClasses.rowHeight = 60
         self.listOfClasses.delegate = self
         self.listOfClasses.dataSource = self
+        self.listOfClasses.preservesSuperviewLayoutMargins = false
+        self.listOfClasses.separatorInset = UIEdgeInsets.zero
+        self.listOfClasses.layoutMargins = UIEdgeInsets.zero
         
         //let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(doneText))
         let nextButton = UIBarButtonItem(title: "Next >", style: UIBarButtonItemStyle.plain, target: self, action: #selector(nextText))
@@ -249,6 +252,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.classNameText?.text = self.tableData[indexPath.row]
         cell.classLocationText?.text = self.locationData[indexPath.row]
         cell.classDayAndTimeText?.text = self.dayTimeData[indexPath.row]
+        
         return cell
     }
     

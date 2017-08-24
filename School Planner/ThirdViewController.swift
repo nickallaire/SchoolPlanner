@@ -88,6 +88,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.listOfAssignments.delegate = self
         self.listOfAssignments.dataSource = self
         self.listOfAssignments.rowHeight = 60
+        self.listOfAssignments.preservesSuperviewLayoutMargins = false
+        self.listOfAssignments.separatorInset = UIEdgeInsets.zero
+        self.listOfAssignments.layoutMargins = UIEdgeInsets.zero
         
         // Initializing UIPickers
         self.picker.showsSelectionIndicator = true
@@ -285,6 +288,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         listOfGradeDistributions.frame = CGRect(x: 20, y: 20, width: customViewGrades.frame.width - 40, height: 175)
         listOfGradeDistributions.backgroundColor = UIColor.lightText
         listOfGradeDistributions.register(UITableViewCell.self, forCellReuseIdentifier: "gradeDistributionCell")
+        listOfGradeDistributions.preservesSuperviewLayoutMargins = false
+        listOfGradeDistributions.separatorInset = UIEdgeInsets.zero
+        listOfGradeDistributions.layoutMargins = UIEdgeInsets.zero
         customViewGrades.addSubview(listOfGradeDistributions)
         
         
@@ -1127,7 +1133,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             let cell = listOfGradeDistributions.dequeueReusableCell(withIdentifier: "gradeDistributionCell", for: indexPath)
             cell.textLabel?.text = self.gradeTableData[indexPath.row]
             cell.backgroundColor = UIColor.clear
+            
             return cell
+            
         } else {
             let cell : AssignmentTableViewCell = listOfAssignments.dequeueReusableCell(withIdentifier: "assignmentCell", for: indexPath) as! AssignmentTableViewCell
             let array: [String] = self.tableData[indexPath.row].components(separatedBy: "|")
