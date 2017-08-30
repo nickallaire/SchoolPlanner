@@ -40,9 +40,12 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         let app = UINavigationBar.appearance()
         app.barTintColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
         app.isTranslucent = false
-        app.barStyle = .black
+        app.barStyle = .default
         app.tintColor = .white
         app.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        
+        UIApplication.shared.statusBarStyle = .lightContent
+
         
         self.fillerLabel.backgroundColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0)
         

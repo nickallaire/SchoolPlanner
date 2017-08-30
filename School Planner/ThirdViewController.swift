@@ -789,9 +789,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
             }
             
-            let final = round(Double(totalGrade / 0.01))
+            
             if total != 0 {
-                gradeLabel.text = String(final / total) + "%"
+                var final = round(Double(totalGrade / 0.01))
+                final = round(Double(final / total) / 0.01) / 100
+                gradeLabel.text = String(final) + "%"
             } else {
                 showAlertMessage(title: "Nothing is graded.", message: "")
             }
@@ -1131,7 +1133,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == listOfGradeDistributions {
             let cell = listOfGradeDistributions.dequeueReusableCell(withIdentifier: "gradeDistributionCell", for: indexPath)
-            cell.textLabel?.text = self.gradeTableData[indexPath.row]
+            cell.textLabel?.text = self.gradeTableData[indexPath.row] + "%"
+//            cell.textLabel?.textAlignment = .left
             cell.backgroundColor = UIColor.clear
             
             return cell
@@ -1150,7 +1153,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 cell.assignmentGradeText?.text = "Due: " + grade
 
             } else {
-                cell.assignmentGradeText?.text = "Score: " + grade
+                cell.assignmentGradeText?.text = "Score: " + grade + "%"
             }
 
             return cell
