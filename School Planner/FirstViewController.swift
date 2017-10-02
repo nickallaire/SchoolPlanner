@@ -42,7 +42,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         app.isTranslucent = false
         app.barStyle = .default
         app.tintColor = .white
-        app.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.white]
+        app.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         
         UIApplication.shared.statusBarStyle = .lightContent
 
@@ -121,7 +121,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         Timer.scheduledTimer(timeInterval: 1.75, target: self, selector: #selector(dismissAlert), userInfo: nil, repeats: false)
     }
     
-    func dismissAlert() {
+    @objc func dismissAlert() {
         self.alert.dismiss(animated: true, completion: nil)
     }
     
@@ -135,7 +135,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func nextText() {
+    @objc func nextText() {
         if self.classTextEdit.isFirstResponder {
             self.classDayTime.becomeFirstResponder()
         } else if self.classDayTime.isFirstResponder {
@@ -145,7 +145,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func prevText() {
+    @objc func prevText() {
         if self.classTextEdit.isFirstResponder {
             self.classTextEdit.resignFirstResponder()
         } else if self.classDayTime.isFirstResponder {
@@ -310,7 +310,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y == 0{
@@ -319,7 +319,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             if self.view.frame.origin.y != 0 {
                 self.view.frame.origin.y += 225
@@ -327,6 +327,3 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
 }
-
-
-

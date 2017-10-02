@@ -177,7 +177,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Long press on assignment list UITableView */
     
-    func longPressAssignments(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc func longPressAssignments(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         
         if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
             let touchPoint = longPressGestureRecognizer.location(in: self.listOfAssignments)
@@ -218,7 +218,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Long press on grade distribution list UITableView */
     
-    func longPressGradeDistributions(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc func longPressGradeDistributions(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         
         if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
             let touchPoint = longPressGestureRecognizer.location(in: self.listOfGradeDistributions)
@@ -531,14 +531,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Dismisses displayed alert */
     
-    func dismissAlert() {
+    @objc func dismissAlert() {
         self.alert.dismiss(animated: true, completion: nil)
     }
     
     
     /* Done button on UIToolBar pressed */
     
-    func donePicker() {
+    @objc func donePicker() {
         if assignmentText.isFirstResponder {
             assignmentText.resignFirstResponder()
         } else if categoryText.isFirstResponder {
@@ -562,7 +562,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Go to next UITextField */
     
-    func nextText() {
+    @objc func nextText() {
         if self.assignmentText.isFirstResponder {
             self.categoryText.becomeFirstResponder()
         } else if self.categoryText.isFirstResponder {
@@ -587,7 +587,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Go to previous UITextField */
     
-    func prevText() {
+    @objc func prevText() {
         if self.assignmentText.isFirstResponder {
             self.assignmentText.resignFirstResponder()
         } else if self.categoryText.isFirstResponder {
@@ -612,7 +612,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Puts selected date in UITextField */
     
-    func dateChanged(_ sender: UIDatePicker) {
+    @objc func dateChanged(_ sender: UIDatePicker) {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yyyy"
         dueDateText.text = formatter.string(from: datePicker.date)
@@ -621,7 +621,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Changes UITextField when UISwitch toggled on/off */
     
-    func switchChanged() {
+    @objc func switchChanged() {
         if radioButton.isOn {
             gradeText.isHidden = false
             dueDateText.isHidden = true
@@ -807,7 +807,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     /* Error check user data and if valid, store in arrays and UserDefaults; set all UI elements
        back to correct colors when adding new assignments */
     
-    func okayButtonPressed(sender: UIButton) {
+    @objc func okayButtonPressed(sender: UIButton) {
         if self.assignmentText.text?.characters.count != 0 && self.categoryText.text?.characters.count != 0 && (self.gradeText.text?.characters.count != 0 || self.dueDateText.text?.characters.count != 0){
             var okay = false
             okay = checkDuplicateAssignment(assignment: self.assignmentText.text!)
@@ -878,7 +878,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     /* Error check user data and if valid, store in arrays; clear UITextFields when
        adding new grade distributions */
     
-    func okayButtonGradesPressed(sender: UIButton) {
+    @objc func okayButtonGradesPressed(sender: UIButton) {
         var okay = false
         var duplicate = false
         var zero = false
@@ -981,7 +981,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     /* Clear all UITextFields, initialize UIPicker to first selection,
        put color back into all UI elements when either cancel button is pressed */
     
-    func cancelButtonPressed(sender: UIButton) {
+    @objc func cancelButtonPressed(sender: UIButton) {
         self.assignmentText.text = ""
         self.categoryText.text = ""
         self.gradeText.text = ""
