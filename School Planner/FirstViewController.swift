@@ -15,7 +15,6 @@
 
 
 import UIKit
-import CoreData
 
 class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
@@ -31,6 +30,9 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     var dayTimeData = [String]()
     var alert: UIAlertController!
     let thirdViewSegue = "segueToTabController"
+    var edittingIndex = 0
+    var amEdittingCell = false
+    var oldClassName = ""
     
     
     @IBOutlet weak var navBar: UINavigationBar!
@@ -114,6 +116,31 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        // Long Press Gesture Recognizer (listOfAssignments)
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressClasses))
+        longPressRecognizer.minimumPressDuration = 0.677 // 1 second press
+        self.listOfClasses.addGestureRecognizer(longPressRecognizer)
+    }
+    
+    /* Long press on assignment list UITableView */
+    
+    @objc func longPressClasses(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        
+        if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
+            let touchPoint = longPressGestureRecognizer.location(in: self.listOfClasses)
+            
+            if let indexPath = listOfClasses.indexPathForRow(at: touchPoint) {
+                
+                self.classTextEdit?.text = self.tableData[indexPath.row]
+                self.classLocation?.text = self.locationData[indexPath.row]
+                self.classDayTime?.text = self.dayTimeData[indexPath.row]
+                self.edittingIndex = indexPath.row
+                self.amEdittingCell = true
+                self.oldClassName = self.tableData[indexPath.row]
+                self.classTextEdit.becomeFirstResponder()
+            }
+        }
     }
     
     @objc func showAlertMessage(title: String, message: String) {
@@ -189,19 +216,29 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     @IBAction func addClassButtonPressed(_ sender: AnyObject) {
         if (self.classTextEdit.text?.count != 0 && self.classLocation.text?.count != 0 && self.classDayTime.text?.count != 0) {
+            if !amEdittingCell {
+                self.tableData.append(self.classTextEdit.text!)
+                self.locationData.append(self.classLocation.text!)
+                self.dayTimeData.append(self.classDayTime.text!)
+                
+                self.listOfClasses.beginUpdates()
+                let indexPath = IndexPath(row: 0, section: 0)
+                self.listOfClasses.numberOfRows(inSection: tableData.count)
+                self.listOfClasses.cellForRow(at: indexPath)
+                self.listOfClasses.insertRows(at: [indexPath], with: .automatic)
+                self.listOfClasses.endUpdates()
+                self.listOfClasses.reloadData()
+            } else {
+                self.tableData[edittingIndex] = self.classTextEdit.text!
+                self.locationData[edittingIndex] = self.classLocation.text!
+                self.dayTimeData[edittingIndex] = self.classDayTime.text!
+                
+                self.listOfClasses.reloadData()
+            }
             
-            self.tableData.append(self.classTextEdit.text!)
-            self.locationData.append(self.classLocation.text!)
-            self.dayTimeData.append(self.classDayTime.text!)
             writeToPreferences(delete: false, className: "")
+            self.amEdittingCell = false
             
-            self.listOfClasses.beginUpdates()
-            let indexPath = IndexPath(row: 0, section: 0)
-            self.listOfClasses.numberOfRows(inSection: tableData.count)
-            self.listOfClasses.cellForRow(at: indexPath)
-            self.listOfClasses.insertRows(at: [indexPath], with: .automatic)
-            self.listOfClasses.endUpdates()
-            self.listOfClasses.reloadData()
             self.classTextEdit.text = ""
             self.classDayTime.text = ""
             self.classLocation.text = ""
@@ -281,11 +318,31 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         preferences.set(self.tableData, forKey: currentKey)
         preferences.set(self.locationData, forKey: currentKey + " location")
         preferences.set(self.dayTimeData, forKey: currentKey + " dayTime")
+        
         if delete {
             preferences.removeObject(forKey: className + " Assignments")
             preferences.removeObject(forKey: className + " GradeDistributions")
             preferences.removeObject(forKey: className + " PickerData")
         }
+        
+        if amEdittingCell {
+            
+            // Store previously stored data
+            let assignments = preferences.array(forKey: self.oldClassName + " Assignments")
+            let gradeDistributions = preferences.array(forKey: self.oldClassName + " GradeDistributions")
+            let pickerData = preferences.array(forKey: self.oldClassName + " PickerData")
+            
+            // Remove previously stored data
+            preferences.removeObject(forKey: self.oldClassName + " Assignments")
+            preferences.removeObject(forKey: self.oldClassName + " GradeDistributions")
+            preferences.removeObject(forKey: self.oldClassName + " PickerData")
+            
+            // Update previously stored data with new class name
+            preferences.set(assignments, forKey: self.classTextEdit.text! + " Assignments")
+            preferences.set(gradeDistributions, forKey: self.classTextEdit.text! + " GradeDistributions")
+            preferences.set(pickerData, forKey: self.classTextEdit.text! + " PickerData")
+        }
+        
         let didSave = preferences.synchronize()
         if !didSave {
             showAlertMessage(title: "Error", message: "Could not save data")
