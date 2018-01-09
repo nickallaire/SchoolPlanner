@@ -733,6 +733,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         listOfAssignments.isUserInteractionEnabled = false
         addAssignmentButton.layer.borderColor = UIColor.lightGray.cgColor
         calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
+        self.gradeCategoryText.becomeFirstResponder()
     }
     
     
@@ -747,6 +748,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         listOfAssignments.isUserInteractionEnabled = false
         addAssignmentButton.layer.borderColor = UIColor.lightGray.cgColor
         calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
+        self.assignmentText.becomeFirstResponder()
     }
     
     
@@ -944,13 +946,13 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                     writeToPreferences(key: "PickerData", data: self.pickerData)
                 }
                 
-                addAssignmentButton.isEnabled = true
-                calculateGradeButton.isEnabled = true
-                bbItem.isEnabled = true
-                gbItem.isEnabled = true
-                listOfAssignments.isUserInteractionEnabled = true
-                addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
-                calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+//                addAssignmentButton.isEnabled = true
+//                calculateGradeButton.isEnabled = true
+//                bbItem.isEnabled = true
+//                gbItem.isEnabled = true
+//                listOfAssignments.isUserInteractionEnabled = true
+//                addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+//                calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
                 
                 self.gradeDistributionText.text = ""
                 self.gradeCategoryText.text = ""
@@ -959,9 +961,9 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 
                 listOfGradeDistributions.setContentOffset(.zero, animated: false)
                 
-                self.view.endEditing(true)
-                
-                customViewGrades.isHidden = true
+//                self.view.endEditing(true)
+//
+//                customViewGrades.isHidden = true
                 
             } else {
                 if duplicate {

@@ -76,15 +76,15 @@
                                     <navigationItem title="Class Schedule" id="WYi-2K-Eg3"/>
                                 </items>
                             </navigationBar>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class days/time..." textAlignment="natural" minimumFontSize="17" id="Y0g-oq-AxH">
-                                <rect key="frame" x="67" y="460" width="240" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class days/time (e.g. T/Th 8:00-9:20am)" textAlignment="center" minimumFontSize="17" id="Y0g-oq-AxH">
+                                <rect key="frame" x="16" y="460" width="343" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class location..." textAlignment="natural" minimumFontSize="17" id="qGt-dT-kuH">
-                                <rect key="frame" x="67" y="510" width="240" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class location (e.g. Center Hall 101)" textAlignment="center" minimumFontSize="17" id="qGt-dT-kuH">
+                                <rect key="frame" x="16" y="510" width="343" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -98,8 +98,8 @@
                                     <action selector="addClassButtonPressed:" destination="9pv-A4-QxB" eventType="touchDown" id="1OZ-dx-iFp"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class name..." textAlignment="natural" minimumFontSize="17" id="Ddo-tg-y9r">
-                                <rect key="frame" x="67" y="410" width="240" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter class name (e.g. CSE 134B)" textAlignment="center" minimumFontSize="17" id="Ddo-tg-y9r">
+                                <rect key="frame" x="16" y="410" width="343" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
