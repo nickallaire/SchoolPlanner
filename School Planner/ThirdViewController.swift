@@ -247,7 +247,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /*** Grade Distributions UIView ***/
     
-    func customViewFuncGrades() {
+    @objc func customViewFuncGrades() {
         
         // UIView specifications
         customViewGrades = UIView(frame: CGRect(x: 30, y: (self.view.frame.height / 2) - 245, width: self.view.frame.width - 60, height: 360))
@@ -348,7 +348,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /*** Assignment UIView ***/
     
-    func customViewFunc() {
+    @objc func customViewFunc() {
         
         // UIView specifications
         customView = UIView(frame: CGRect(x: 30, y: (self.view.frame.height / 2) - 185, width: self.view.frame.width - 60, height: 300))
@@ -522,7 +522,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     /* Displays alert message for wrong data */
     
-    func showAlertMessage(title: String, message: String) {
+    @objc func showAlertMessage(title: String, message: String) {
         self.alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         self.present(self.alert, animated: true, completion: nil)
         Timer.scheduledTimer(timeInterval: 1.75, target: self, selector: #selector(dismissAlert), userInfo: nil, repeats: false)
@@ -808,14 +808,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
        back to correct colors when adding new assignments */
     
     @objc func okayButtonPressed(sender: UIButton) {
-        if self.assignmentText.text?.characters.count != 0 && self.categoryText.text?.characters.count != 0 && (self.gradeText.text?.characters.count != 0 || self.dueDateText.text?.characters.count != 0){
+        if self.assignmentText.text?.count != 0 && self.categoryText.text?.count != 0 && (self.gradeText.text?.count != 0 || self.dueDateText.text?.count != 0){
             var okay = false
             okay = checkDuplicateAssignment(assignment: self.assignmentText.text!)
             
             if okay {
                 if !amEdittingCell {
                     var newString = ""
-                    if self.gradeText.text?.characters.count != 0 {
+                    if self.gradeText.text?.count != 0 {
                         newString = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
 
                     } else {
@@ -831,7 +831,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                     self.listOfAssignments.endUpdates()
                     self.listOfAssignments.reloadData()
                 } else {
-                    if self.gradeText.text?.characters.count != 0 {
+                    if self.gradeText.text?.count != 0 {
                         self.tableData[edittingIndex] = self.assignmentText.text! + " | " + self.categoryText.text! + " | " + self.gradeText.text!
 
                     } else {
@@ -882,7 +882,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         var okay = false
         var duplicate = false
         var zero = false
-        if self.gradeDistributionText.text?.characters.count != 0 && self.gradeCategoryText.text?.characters.count != 0 {
+        if self.gradeDistributionText.text?.count != 0 && self.gradeCategoryText.text?.count != 0 {
             duplicate = checkDuplicateCategory(category: gradeCategoryText.text!)
             if !duplicate {
                 okay = checkCategoryPercentage(percentage: self.gradeDistributionText.text!, category: gradeCategoryText.text!)
@@ -1033,13 +1033,13 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == categoryText {
-            if categoryText.text?.characters.count == 0 {
+            if categoryText.text?.count == 0 {
                 if pickerData.count > 0 {
                     categoryText.text = pickerData[0]
                 }
             }
         } else if textField == dueDateText {
-            if dueDateText.text?.characters.count == 0 {
+            if dueDateText.text?.count == 0 {
                 let todaysDate = Date()
                 let formatter = DateFormatter()
                 formatter.dateFormat = "MM/dd/yyyy"

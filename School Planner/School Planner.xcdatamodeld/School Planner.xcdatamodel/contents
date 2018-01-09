@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G1114" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Assignment" representedClassName="Assignment" syncable="YES" codeGenerationType="class">
+        <attribute name="attribute" optional="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" syncable="YES"/>
+    </entity>
+    <entity name="Class" representedClassName="Class" syncable="YES" codeGenerationType="class">
+        <attribute name="daystime" optional="YES" syncable="YES"/>
+        <attribute name="location" optional="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Class" positionX="-45" positionY="0" width="128" height="90"/>
+        <element name="Assignment" positionX="-18" positionY="54" width="128" height="75"/>
+    </elements>
+</model>

@@ -15,6 +15,7 @@
 
 
 import UIKit
+import CoreData
 
 class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
@@ -115,7 +116,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func showAlertMessage(title: String, message: String) {
+    @objc func showAlertMessage(title: String, message: String) {
         self.alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         self.present(self.alert, animated: true, completion: nil)
         Timer.scheduledTimer(timeInterval: 1.75, target: self, selector: #selector(dismissAlert), userInfo: nil, repeats: false)
@@ -187,12 +188,12 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     @IBAction func addClassButtonPressed(_ sender: AnyObject) {
-        if (self.classTextEdit.text?.characters.count != 0 && self.classLocation.text?.characters.count != 0 && self.classDayTime.text?.characters.count != 0) {
+        if (self.classTextEdit.text?.count != 0 && self.classLocation.text?.count != 0 && self.classDayTime.text?.count != 0) {
             
             self.tableData.append(self.classTextEdit.text!)
             self.locationData.append(self.classLocation.text!)
             self.dayTimeData.append(self.classDayTime.text!)
-            writeToPreferences()
+            writeToPreferences(delete: false, className: "")
             
             self.listOfClasses.beginUpdates()
             let indexPath = IndexPath(row: 0, section: 0)
@@ -261,11 +262,12 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
-            self.tableData.remove(at: indexPath.row)
+            let name = self.tableData.remove(at: indexPath.row)
+            print(name)
             self.locationData.remove(at: indexPath.row)
             self.dayTimeData.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
-            writeToPreferences()
+            writeToPreferences(delete: true, className: name)
         }
     }
     
@@ -273,37 +275,43 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.performSegue(withIdentifier: thirdViewSegue, sender: indexPath)
     }
     
-    func writeToPreferences() {
+    func writeToPreferences(delete: Bool, className: String) {
         let preferences = UserDefaults.standard
         let currentKey = "classList"
         preferences.set(self.tableData, forKey: currentKey)
         preferences.set(self.locationData, forKey: currentKey + " location")
         preferences.set(self.dayTimeData, forKey: currentKey + " dayTime")
+        if delete {
+            preferences.removeObject(forKey: className + " Assignments")
+            preferences.removeObject(forKey: className + " GradeDistributions")
+            preferences.removeObject(forKey: className + " PickerData")
+        }
         let didSave = preferences.synchronize()
         if !didSave {
-            
+            showAlertMessage(title: "Error", message: "Could not save data")
         }
+        
     }
     
     func readFromPreferences() {
         let preferences = UserDefaults.standard
         let currentKey = "classList"
         if preferences.object(forKey: currentKey) == nil {
-            
+
         } else {
             let td = preferences.array(forKey: currentKey)
             self.tableData = td as! [String]
         }
-        
+
         if preferences.object(forKey: currentKey + " location") == nil {
-            
+
         } else {
             let ld = preferences.array(forKey: currentKey + " location")
             self.locationData =  ld as! [String]
         }
-        
+
         if preferences.object(forKey: currentKey + " dayTime") == nil {
-            
+
         } else {
             let dtd = preferences.array(forKey: currentKey + " dayTime")
             self.dayTimeData = dtd as! [String]
