@@ -18,6 +18,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     @IBOutlet weak var addAssignmentButton: UIButton!
     @IBOutlet weak var calculateGradeButton: UIButton!
+    @IBOutlet weak var editButton: UIButton!
     
     @IBOutlet weak var listOfAssignments: UITableView!
     
@@ -106,17 +107,20 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.gradeTableData = readFromPreferences(key: "GradeDistributions")
         self.pickerData = readFromPreferences(key: "PickerData")
         
-        // UIButton (addAssignmentButton) border customization
+        // UIButton (addAssignmentButton) customization
         addAssignmentButton.layer.cornerRadius = 5
         addAssignmentButton.layer.borderWidth = 1
         addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
         addAssignmentButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         
-        // UIButton (calculateGradeButton) border customization
+        // UIButton (calculateGradeButton) customization
         calculateGradeButton.layer.cornerRadius = 5
         calculateGradeButton.layer.borderWidth = 1
         calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
         calculateGradeButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
+        
+        // UIButton (editButton) customization
+        editButton.tintColor = UIColor(red: 0.2431, green: 0.6784, blue: 0.5608, alpha: 1.0)
         
         // Long Press Gesture Recognizer (listOfAssignments)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressAssignments))
@@ -736,6 +740,17 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.gradeCategoryText.becomeFirstResponder()
     }
     
+    /* Allow table to be editted */
+    
+    @IBAction func editButtonPressed(_ sender: UIButton) {
+        if self.editButton.titleLabel!.text == "Edit" {
+            self.listOfAssignments.isEditing = true
+            self.editButton.setTitle("Done", for: .normal)
+        } else if self.editButton.titleLabel!.text == "Done" {
+            self.listOfAssignments.isEditing = false
+            self.editButton.setTitle("Edit", for: .normal)
+        }
+    }
     
     /* UI changes when Assignments button pressed */
     
@@ -1206,6 +1221,21 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return .none
+    }
+    
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedObject = self.tableData[sourceIndexPath.row]
+        tableData.remove(at: sourceIndexPath.row)
+        tableData.insert(movedObject, at: destinationIndexPath.row)
+        writeToPreferences(key: "Assignments", data: self.tableData)
     }
     
     

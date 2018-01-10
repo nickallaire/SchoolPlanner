@@ -263,6 +263,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="e4r-La-uGC">
+                                <rect key="frame" x="313" y="165" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Edit"/>
+                                <connections>
+                                    <action selector="editButtonPressed:" destination="w0p-Lx-9lL" eventType="touchUpInside" id="xK9-8S-DDn"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -274,6 +282,7 @@
                         <outlet property="bbItem" destination="JcT-83-Ocg" id="AFg-le-TiZ"/>
                         <outlet property="calculateGradeButton" destination="s2z-9u-Y9k" id="dB9-Iz-20d"/>
                         <outlet property="dayTimeText" destination="jtY-nV-6kt" id="L2e-TI-26C"/>
+                        <outlet property="editButton" destination="e4r-La-uGC" id="IVi-Zk-87F"/>
                         <outlet property="gbItem" destination="cLR-Ey-mZb" id="3Ui-vf-e5N"/>
                         <outlet property="gradeLabel" destination="t1E-Mc-zoz" id="JNx-Bk-iWV"/>
                         <outlet property="listOfAssignments" destination="ATO-SD-BQh" id="LTB-TM-Wgz"/>
