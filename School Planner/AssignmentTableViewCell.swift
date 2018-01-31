@@ -24,5 +24,15 @@ class AssignmentTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+
+        if editing == true && editingStyle == .none {
+            self.assignmentGradeText.frame.origin.x = 160
+        } else {
+            self.assignmentGradeText.frame.origin.x = 205
+        }
+    }
 
 }

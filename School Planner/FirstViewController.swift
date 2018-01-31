@@ -300,7 +300,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
             let name = self.tableData.remove(at: indexPath.row)
-            print(name)
             self.locationData.remove(at: indexPath.row)
             self.dayTimeData.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)

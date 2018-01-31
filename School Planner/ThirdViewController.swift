@@ -65,6 +65,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     var datePicker = UIDatePicker()
     
     var alert: UIAlertController!
+    
+    var estyle = false
 
     
     /* View loads for first time */
@@ -182,39 +184,40 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     /* Long press on assignment list UITableView */
     
     @objc func longPressAssignments(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        
-        if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
-            let touchPoint = longPressGestureRecognizer.location(in: self.listOfAssignments)
-           
-            if let indexPath = listOfAssignments.indexPathForRow(at: touchPoint) {
-                
-                let tableText = tableData[indexPath.row]
-                let distributionArray : [String] = tableText.components(separatedBy: "|")
-                self.assignmentText.text = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
-                self.categoryText.text = distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
-                self.oldValue = self.assignmentText.text!
-                let charSet = CharacterSet(charactersIn: "/")
-                
-                if distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces).rangeOfCharacter(from: charSet) == nil {
-                    self.radioButton.setOn(true, animated: false)
-                    self.gradeText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
-                } else {
-                    self.radioButton.setOn(false, animated: false)
-                    self.gradeText.isHidden = true
-                    self.dueDateText.isHidden = false
-                    self.dueDateText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
+        if !self.listOfAssignments.isEditing {
+            if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
+                let touchPoint = longPressGestureRecognizer.location(in: self.listOfAssignments)
+               
+                if let indexPath = listOfAssignments.indexPathForRow(at: touchPoint) {
+                    
+                    let tableText = tableData[indexPath.row]
+                    let distributionArray : [String] = tableText.components(separatedBy: "|")
+                    self.assignmentText.text = distributionArray[0].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                    self.categoryText.text = distributionArray[1].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                    self.oldValue = self.assignmentText.text!
+                    let charSet = CharacterSet(charactersIn: "/")
+                    
+                    if distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces).rangeOfCharacter(from: charSet) == nil {
+                        self.radioButton.setOn(true, animated: false)
+                        self.gradeText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                    } else {
+                        self.radioButton.setOn(false, animated: false)
+                        self.gradeText.isHidden = true
+                        self.dueDateText.isHidden = false
+                        self.dueDateText.text = distributionArray[2].trimmingCharacters(in: NSCharacterSet.whitespaces)
+                    }
+                    
+                    customView.isHidden = false
+                    addAssignmentButton.isEnabled = false
+                    calculateGradeButton.isEnabled = false
+                    bbItem.isEnabled = false
+                    gbItem.isEnabled = false
+                    listOfAssignments.isUserInteractionEnabled = false
+                    addAssignmentButton.layer.borderColor = UIColor.lightGray.cgColor
+                    calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
+                    self.edittingIndex = indexPath.row
+                    self.amEdittingCell = true
                 }
-                
-                customView.isHidden = false
-                addAssignmentButton.isEnabled = false
-                calculateGradeButton.isEnabled = false
-                bbItem.isEnabled = false
-                gbItem.isEnabled = false
-                listOfAssignments.isUserInteractionEnabled = false
-                addAssignmentButton.layer.borderColor = UIColor.lightGray.cgColor
-                calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
-                self.edittingIndex = indexPath.row
-                self.amEdittingCell = true
             }
         }
     }
@@ -223,7 +226,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     /* Long press on grade distribution list UITableView */
     
     @objc func longPressGradeDistributions(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
-        
         if longPressGestureRecognizer.state == UIGestureRecognizerState.began {
             let touchPoint = longPressGestureRecognizer.location(in: self.listOfGradeDistributions)
             
@@ -467,7 +469,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         // UIDatePicker (datePicker) specifications
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         let todaysDate = Date()
-        datePicker.minimumDate = todaysDate
+//        datePicker.minimumDate = todaysDate
         
         
         // UIToolBar (toolBar1) specifications
@@ -744,9 +746,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     @IBAction func editButtonPressed(_ sender: UIButton) {
         if self.editButton.titleLabel!.text == "Edit" {
+            self.estyle = true
             self.listOfAssignments.isEditing = true
             self.editButton.setTitle("Done", for: .normal)
         } else if self.editButton.titleLabel!.text == "Done" {
+            self.estyle = false
             self.listOfAssignments.isEditing = false
             self.editButton.setTitle("Edit", for: .normal)
         }
@@ -1118,7 +1122,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             let timeFormatter = DateFormatter()
             timeFormatter.timeStyle = DateFormatter.Style.short
             let strDate = timeFormatter.string(from: datePicker.date)
-            debugPrint("DATE IS " + strDate)
             dueDateText.text = strDate
         }
     }
@@ -1151,7 +1154,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         if tableView == listOfGradeDistributions {
             let cell = listOfGradeDistributions.dequeueReusableCell(withIdentifier: "gradeDistributionCell", for: indexPath)
             cell.textLabel?.text = self.gradeTableData[indexPath.row] + "%"
-//            cell.textLabel?.textAlignment = .left
             cell.backgroundColor = UIColor.clear
             
             return cell
@@ -1168,7 +1170,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             let charSet = CharacterSet(charactersIn: "/")
             if grade.rangeOfCharacter(from: charSet) != nil {
                 cell.assignmentGradeText?.text = "Due: " + grade
-
             } else {
                 cell.assignmentGradeText?.text = "Score: " + grade + "%"
             }
@@ -1224,7 +1225,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .none
+        if estyle {
+            return .none
+        }
+        return .delete
+
     }
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
@@ -1239,7 +1244,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    /****** Save data when added/editted ******/
+    /****** Save data when added/edited ******/
     
     func writeToPreferences(key: String, data: [String]) {
         let preferences = UserDefaults.standard
