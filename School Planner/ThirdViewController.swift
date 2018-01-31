@@ -734,11 +734,13 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customViewGrades.isHidden = false
         addAssignmentButton.isEnabled = false
         calculateGradeButton.isEnabled = false
+        editButton.isEnabled = false
         bbItem.isEnabled = false
         gbItem.isEnabled = false
         listOfAssignments.isUserInteractionEnabled = false
         addAssignmentButton.layer.borderColor = UIColor.lightGray.cgColor
         calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
+        editButton.layer.borderColor = UIColor.lightGray.cgColor
         self.gradeCategoryText.becomeFirstResponder()
     }
     
@@ -762,11 +764,13 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         customView.isHidden = false
         addAssignmentButton.isEnabled = false
         calculateGradeButton.isEnabled = false
+        editButton.isEnabled = false
         bbItem.isEnabled = false
         gbItem.isEnabled = false
         listOfAssignments.isUserInteractionEnabled = false
         addAssignmentButton.layer.borderColor = UIColor.lightGray.cgColor
         calculateGradeButton.layer.borderColor = UIColor.lightGray.cgColor
+        editButton.layer.borderColor = UIColor.lightGray.cgColor
         self.assignmentText.becomeFirstResponder()
     }
     
@@ -876,11 +880,13 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 
                 addAssignmentButton.isEnabled = true
                 calculateGradeButton.isEnabled = true
+                editButton.isEnabled = true
                 bbItem.isEnabled = true
                 gbItem.isEnabled = true
                 listOfAssignments.isUserInteractionEnabled = true
                 addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
                 calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+                editButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
 
                 writeToPreferences(key: "Assignments", data: self.tableData)
                 
@@ -1019,11 +1025,13 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         addAssignmentButton.isEnabled = true
         calculateGradeButton.isEnabled = true
+        editButton.isEnabled = true
         bbItem.isEnabled = true
         gbItem.isEnabled = true
         listOfAssignments.isUserInteractionEnabled = true
         addAssignmentButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
         calculateGradeButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
+        editButton.layer.borderColor = UIColor(red: 0.1255, green: 0.6039, blue: 0.6784, alpha: 1.0).cgColor
         listOfGradeDistributions.setContentOffset(.zero, animated: false)
         
         self.view.endEditing(true)
