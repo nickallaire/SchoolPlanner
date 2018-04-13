@@ -1,1 +1,3 @@
-# SchoolPlanner
+# School Planner
+
+Project Overview: Swift iOS Application for students to keep track of assignments for each class, store grade distributions for each class, and calculates the current grade based on graded assignments. Assignment start out with a due date and can be editted to include the grade once the assignment is graded. Complete with error checking so that duplicate assignments and grade distributions cannot be added, grade distributions cannot exceed 100%, and all fields must be filled out before anything is saved. All data is stored locally on the iPhone and persists until deleted by the user.

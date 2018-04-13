@@ -468,7 +468,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // UIDatePicker (datePicker) specifications
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
-        let todaysDate = Date()
+//        let todaysDate = Date()
 //        datePicker.minimumDate = todaysDate
         
         
